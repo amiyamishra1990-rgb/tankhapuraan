@@ -1,5 +1,5 @@
 import TRANSLATIONS from './translations';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 const T = TRANSLATIONS;
 // ─────────────────────────────────────────────────────────────
 // TANKHAPURAAN — COMPLETE APP
@@ -98,7 +98,6 @@ export default function TankhaPuraan() {
   const [mythOpen, setMythOpen] = useState(null);
   const [mythsDone, setMythsDone] = useState(new Set());
   const [paying, setPaying]     = useState(false);
-  const [paid, setPaid]         = useState(false);
   const [copied, setCopied]     = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -373,7 +372,7 @@ export default function TankhaPuraan() {
                 ))}
               </div>
             )}
-            {STEP_IDS[step]!=="salary"&&(
+            {STEP_IDS[step]!==="salary"&&(
               <button style={S.skipB} onClick={()=>{setVals(v=>({...v,[STEP_IDS[step]]:0}));step<STEP_IDS.length-1?setStep(s=>s+1):setES(true);}}>
                 {t.skip}
               </button>
@@ -727,7 +726,7 @@ const S={
   root:    {fontFamily:"'Hind','Segoe UI',sans-serif",background:"#FBF7F0",minHeight:"100vh",color:"#2C2416"},
   langPage:{maxWidth:520,margin:"0 auto",padding:"36px 20px 52px"},
   langGrid:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14},
-  nav:     {background:"white",borderBottom:"1px solid #EEE5D6",padding:"14px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,zIndex:100,position:"relative"},
+  nav:     {background:"white",borderBottom:"1px solid #EEE5D6",padding:"14px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",top:0,zIndex:100,position:"relative"},
   logoIco: {width:36,height:36,background:"linear-gradient(135deg,#E07B39,#C86A2A)",borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18},
   logoT:   {fontFamily:"Georgia,serif",fontSize:17,fontWeight:700,color:"#2C2416"},
   logoS:   {fontSize:9,color:"#B8A990",letterSpacing:1.5,textTransform:"uppercase"},
