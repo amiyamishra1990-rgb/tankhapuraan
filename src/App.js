@@ -368,7 +368,7 @@ export default function TankhaPuraan() {
             {STEP_IDS[step]==="salary"&&(
               <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:12}}>
                 {[400000,600000,800000,1200000,1800000].map(v=>(
-                  <button key={v} className="btn-q" style={{background:vals.salary==v?lg.color:"#F5EDE0",color:vals.salary==v?"white":"#6B5740"}} onClick={()=>setVals(p=>({...p,salary:v}))}>{fs(v)}</button>
+                  <button key={v} className="btn-q" style={{background:vals.salary===v?lg.color:"#F5EDE0",color:vals.salary===v?"white":"#6B5740"}} onClick={()=>setVals(p=>({...p,salary:v}))}>{fs(v)}</button>
                 ))}
               </div>
             )}
