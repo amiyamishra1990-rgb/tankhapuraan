@@ -1,6 +1,5 @@
-import TRANSLATIONS from './translations';
 import { useState } from "react";
-const T = TRANSLATIONS;
+
 // ─────────────────────────────────────────────────────────────
 // TANKHAPURAAN — COMPLETE APP
 // A product of Artha Technologies Pvt Ltd 🇮🇳
@@ -36,6 +35,11 @@ const LANGUAGES = [
   { code:"sd", name:"Sindhi",    native:"سنڌي",       region:"Rajasthan",            color:"#7C5CBF" },
 ];
 
+// ── TRANSLATIONS (core strings) ───────────────────────────────
+const T = {
+  hi:  { tag:"तनख्वाह की पाठशाला", badge:"टूल 2 · बिल्कुल मुफ्त", h1a:"पुराना Regime या", h1b:"नया Regime?", sub:"हर April यही confusion.\n2 मिनट में exact जवाब — rupee by rupee.", cta:"अपना Tax Check करो — Free में →", safe:"🔒 कोई data save नहीं · Account नहीं · 2 min", skip:"Skip — यह मेरे लिए नहीं", next:"आगे बढ़ो →", calc:"Calculate करो →", eName:"आपका नाम", eEmail:"Email address", eTitle:"Result कहाँ भेजें?", eHint:"एक बार enter करो — हमेशा save।", eBtn:"मेरा Result दिखाओ →", eSafe:"🔒 Spam नहीं।", lTitle:"TankhaPuraan पढ़ रहा है...", lLines:["Salary slip पढ़ रहा हूँ... 📄","CA calculations कर रहा हूँ... 🧮","दोनों regimes compare... ⚖️","Best option ढूंढ रहा हूँ... 🔍","Almost done... ✨"], lSub:"CA से तेज़, CA से सस्ता 😄", rBetter:"आपके लिए BETTER है", rNew:"New Regime", rOld:"Old Regime", rSaving:"आप बचाएंगे", rYear:"/साल", rMonth:"/महीना", rAI:"TANKHAPURAAN KEHTA HAI", rCompare:"आपका Tax Comparison", rCTC:"Annual CTC", rTax:"Tax per year", rInHand:"In-hand / month", rUTitle:"📄 Detailed PDF Report चाहिए?", rUBtn:"PDF Report ₹199 में लाओ →", rShare:"किसी colleague को भी confusion? Share करो 👇", rShareBtn:"📲 WhatsApp Share", rRecalc:"← दोबारा Calculate करो", labels:["Annual CTC","HRA मिलता है","Rent देते हो","80C Investments","80D Health Insurance","Home Loan Interest"], hints:["साल भर की salary","Salary slip में HRA","असल किराया per year","PF+ELSS+LIC+PPF","Medical insurance","Home loan interest"], ph:["जैसे 1200000","जैसे 240000","0 अगर खुद का घर","Max ₹1,50,000","Max ₹25,000","0 अगर loan नहीं"], pains:["\"CA को ₹3,000 दिए। New regime better बोला। क्यों? पता नहीं।\"","\"20% hike मिला। Tax ज़्यादा कटा। In-hand same रहा।\"","\"Form 16 आया। HRA claim करना चाहिए या नहीं?\""] },
+  en:  { tag:"The Holy Scripture of Your Salary", badge:"Tool 2 · Completely FREE", h1a:"Old Regime or", h1b:"New Regime?", sub:"Every April, same confusion.\nGet the exact answer in 2 minutes.", cta:"Check My Tax — For Free →", safe:"🔒 No data saved · No account · 2 mins", skip:"Skip — Not applicable to me", next:"Continue →", calc:"Calculate Now →", eName:"Your name", eEmail:"Email address", eTitle:"Where to send your result?", eHint:"Enter once — saved forever.", eBtn:"Show My Result →", eSafe:"🔒 No spam.", lTitle:"TankhaPuraan is calculating...", lLines:["Reading your salary slip... 📄","CA-level calculations... 🧮","Comparing both regimes... ⚖️","Finding best option... 🔍","Almost done... ✨"], lSub:"Faster than a CA, cheaper too 😄", rBetter:"BETTER FOR YOU", rNew:"New Regime", rOld:"Old Regime", rSaving:"You will save", rYear:"/year", rMonth:"/month", rAI:"TANKHAPURAAN SAYS", rCompare:"Your Tax Comparison", rCTC:"Annual CTC", rTax:"Tax per year", rInHand:"In-hand / month", rUTitle:"📄 Want a Detailed PDF Report?", rUBtn:"Get PDF Report for ₹199 →", rShare:"Know a colleague with same confusion? Share 👇", rShareBtn:"📲 Share on WhatsApp", rRecalc:"← Calculate Again", labels:["Annual CTC","HRA Received","Rent Paid","80C Investments","80D Health Insurance","Home Loan Interest"], hints:["Total salary per year","House Rent Allowance","Actual rent per year","PF+ELSS+LIC+PPF","Medical insurance","Home loan interest"], ph:["e.g. 1200000","e.g. 240000","0 if own home","Max ₹1,50,000","Max ₹25,000","0 if no loan"], pains:["\"Paid CA ₹3,000. Said new regime is better. Why? No idea.\"","\"Got 20% hike. More tax cut. In-hand stayed the same.\"","\"Form 16 arrived. Should I claim HRA or not?\""] },
+};
 // All other languages fallback to Hindi with native header
 LANGUAGES.forEach(l => { if (!T[l.code]) T[l.code] = { ...T.hi }; });
 // Tamil, Telugu, Bengali, Marathi, etc. — native pain cards
@@ -127,7 +131,7 @@ export default function TankhaPuraan() {
   // ── Razorpay payment (demo) ────────────────────────────────
   async function pay(){
     setPaying(true);
-    setTimeout(()=>{setPaying(false);setPaid(true);setScreen("success");},2000);
+    setTimeout(()=>{setPaying(false);setScreen("success");},2000);
   }
 
   const prog=((step+1)/STEP_IDS.length)*100;
@@ -372,7 +376,7 @@ export default function TankhaPuraan() {
                 ))}
               </div>
             )}
-            {STEP_IDS[step]!==="salary"&&(
+            {STEP_IDS[step]!=="salary"&&(
               <button style={S.skipB} onClick={()=>{setVals(v=>({...v,[STEP_IDS[step]]:0}));step<STEP_IDS.length-1?setStep(s=>s+1):setES(true);}}>
                 {t.skip}
               </button>
@@ -726,7 +730,7 @@ const S={
   root:    {fontFamily:"'Hind','Segoe UI',sans-serif",background:"#FBF7F0",minHeight:"100vh",color:"#2C2416"},
   langPage:{maxWidth:520,margin:"0 auto",padding:"36px 20px 52px"},
   langGrid:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14},
-  nav:     {background:"white",borderBottom:"1px solid #EEE5D6",padding:"14px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",top:0,zIndex:100,position:"relative"},
+  nav:     {background:"white",borderBottom:"1px solid #EEE5D6",padding:"14px 20px",display:"flex",justifyContent:"space-between",alignItems:"center",top:0,zIndex:100,position:"sticky"},
   logoIco: {width:36,height:36,background:"linear-gradient(135deg,#E07B39,#C86A2A)",borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18},
   logoT:   {fontFamily:"Georgia,serif",fontSize:17,fontWeight:700,color:"#2C2416"},
   logoS:   {fontSize:9,color:"#B8A990",letterSpacing:1.5,textTransform:"uppercase"},
