@@ -1,4 +1,6 @@
+import { TRANSLATIONS } from './translations';
 import { useState } from "react";
+const T = TRANSLATIONS;
 
 // ─────────────────────────────────────────────────────────────
 // TANKHAPURAAN — COMPLETE APP
