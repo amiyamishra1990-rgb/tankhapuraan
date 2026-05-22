@@ -252,8 +252,7 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: MYTH BREAKER
   // ══════════════════════════════════════════════════════════
-  if(screen==="myths"){
-  const t = T[lang] || T.hi;
+  if(screen==="myths") const t = T[lang] || T.hi;
   return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
@@ -511,8 +510,7 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: PAYMENT
   // ══════════════════════════════════════════════════════════
-  if(screen==="payment"){
-  const t = T[lang] || T.hi;
+  if(screen==="payment") const t = T[lang] || T.hi;
   return(
     <div style={S.root}><style>{CSS}</style>
       <div style={S.nav}>
@@ -602,12 +600,7 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: SUCCESS
   // ══════════════════════════════════════════════════════════
-  }
-
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: SUCCESS
-  if(screen==="success"){
-  const t = T[lang] || T.hi;
+  if(screen==="success") const t = T[lang] || T.hi;
   return(
     <div style={S.root}><style>{CSS}</style>
       <Nav showMenu={false}/>
@@ -667,8 +660,7 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: ABOUT
   // ══════════════════════════════════════════════════════════
-  if(screen==="about"){
-  const t = T[lang] || T.hi;
+  if(screen==="about") const t = T[lang] || T.hi;
   return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
