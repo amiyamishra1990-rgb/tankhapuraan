@@ -38,18 +38,6 @@ const LANGUAGES = [
 ];
 
 
-// All other languages fallback to Hindi with native header
-LANGUAGES.forEach(l => { if (!T[l.code]) T[l.code] = { ...T.hi }; });
-// Tamil, Telugu, Bengali, Marathi, etc. — native pain cards
-T.ta = { ...T.hi, tag:"உங்கள் சம்பளத்தின் புனித நூல்", badge:"கருவி 2 · முற்றிலும் இலவசம்", h1a:"பழைய Regime-ஆ?", h1b:"புதிய Regime-ஆ?", cta:"என் Tax பார்க்க → இலவசம்", pains:["\"CA-க்கு ₹3,000 கொடுத்தேன். புதிய regime சரி என்றார். ஏன்? தெரியவில்லை.\"","\"20% hike கிடைத்தது. Tax அதிகம். கையில் அதே amount.\"","\"Form 16 வந்தது. HRA claim செய்யணுமா?\""] };
-T.te = { ...T.hi, tag:"మీ జీతం యొక్క పవిత్ర గ్రంథం", badge:"సాధనం 2 · పూర్తిగా ఉచితం", h1a:"పాత Regime-ఆ?", h1b:"కొత్త Regime-ఆ?", cta:"నా Tax చూసుకో → ఉచితంగా", pains:["\"CA కి ₹3,000 ఇచ్చాను. New regime బెటర్ అన్నాడు. ఎందుకు? తెలియదు.\"","\"20% hike వచ్చింది. Tax ఎక్కువ. In-hand అదే.\"","\"Form 16 వచ్చింది. HRA claim చేయాలా?\""] };
-T.bn = { ...T.hi, tag:"আপনার বেতনের পবিত্র শাস্ত্র", badge:"টুল ২ · সম্পূর্ণ বিনামূল্যে", h1a:"পুরনো Regime নাকি", h1b:"নতুন Regime?", cta:"আমার Tax দেখুন — বিনামূল্যে →", pains:["\"CA-কে ₹৩,০০০ দিলাম। New regime ভালো বললেন। কেন? জানি না।\"","\"২০% hike পেলাম। বেশি tax। হাতে একই।\"","\"Form 16 এল। HRA claim করব কি?\""] };
-T.mr = { ...T.hi, tag:"तुमच्या पगाराचा पवित्र ग्रंथ", badge:"साधन २ · पूर्णपणे मोफत", h1a:"जुनं Regime की", h1b:"नवं Regime?", cta:"माझा Tax तपासा — मोफत →", pains:["\"CA ला ₹३,००० दिले. New regime बरं म्हणाले. का? माहीत नाही.\"","\"२०% hike मिळाला. जास्त tax. हातात तेवढंच.\"","\"Form 16 आलं. HRA claim करायला हवं?\""] };
-T.gu = { ...T.hi, tag:"તમારા પગારનો પવિત્ર ગ્રંથ", badge:"ટૂલ ૨ · સંપૂર્ણ મફત", h1a:"જૂનો Regime કે", h1b:"નવો Regime?", cta:"મારો Tax ચેક કરો — મફત →" };
-T.kn = { ...T.hi, tag:"ನಿಮ್ಮ ವೇತನದ ಪವಿತ್ರ ಗ್ರಂಥ", badge:"ಸಾಧನ 2 · ಸಂಪೂರ್ಣ ಉಚಿತ", h1a:"ಹಳೆಯ Regime-ಆ?", h1b:"ಹೊಸ Regime-ಆ?", cta:"ನನ್ನ Tax → ಉಚಿತ" };
-T.ml = { ...T.hi, tag:"നിങ്ങളുടെ ശമ്പളത്തിന്റെ വേദഗ്രന്ഥം", badge:"ടൂൾ 2 · തികച്ചും സൗജന്യം", h1a:"പഴയ Regime-ആണോ?", h1b:"പുതിയ Regime-ആണോ?", cta:"എന്റെ Tax → സൗജന്യം" };
-T.pa = { ...T.hi, tag:"ਤਨਖਾਹ ਦੀ ਪਾਠਸ਼ਾਲਾ", badge:"ਟੂਲ 2 · ਬਿਲਕੁਲ ਮੁਫ਼ਤ", h1a:"ਪੁਰਾਣਾ Regime ਜਾਂ", h1b:"ਨਵਾਂ Regime?", cta:"ਮੇਰਾ Tax ਚੈੱਕ ਕਰੋ — ਮੁਫ਼ਤ →" };
-T.ur = { ...T.hi, tag:"آپ کی تنخواہ کی مقدس کتاب", badge:"ٹول 2 · بالکل مفت", h1a:"پرانا Regime یا", h1b:"نیا Regime?", cta:"میرا Tax چیک کریں — مفت →" };
 
 // ── MYTHS (10) ────────────────────────────────────────────────
 const MYTHS = [
@@ -264,7 +252,9 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: MYTH BREAKER
   // ══════════════════════════════════════════════════════════
-  if(screen==="myths") return(
+  if(screen==="myths"){
+  const t = T[lang] || T.hi;
+  return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
       <div style={S.wrap}>
@@ -424,6 +414,7 @@ export default function TankhaPuraan() {
   // SCREEN: RESULT
   // ══════════════════════════════════════════════════════════
   if(screen==="result"&&result){
+    const t = T[lang] || T.hi;
     const{winner,saving,newTax,oldTax,takeNew,takeOld,ctc}=result;
     const wc=winner==="new"?"#2D9B6F":winner==="old"?"#2471A3":"#8B7355";
     const wLabel=winner==="new"?t.rNew:winner==="old"?t.rOld:"Equal";
@@ -520,7 +511,9 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: PAYMENT
   // ══════════════════════════════════════════════════════════
-  if(screen==="payment") return(
+  if(screen==="payment"){
+  const t = T[lang] || T.hi;
+  return(
     <div style={S.root}><style>{CSS}</style>
       <div style={S.nav}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -609,7 +602,13 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: SUCCESS
   // ══════════════════════════════════════════════════════════
-  if(screen==="success") return(
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // SCREEN: SUCCESS
+  if(screen==="success"){
+  const t = T[lang] || T.hi;
+  return(
     <div style={S.root}><style>{CSS}</style>
       <Nav showMenu={false}/>
       <div style={S.wrap}>
@@ -668,7 +667,9 @@ export default function TankhaPuraan() {
   // ══════════════════════════════════════════════════════════
   // SCREEN: ABOUT
   // ══════════════════════════════════════════════════════════
-  if(screen==="about") return(
+  if(screen==="about"){
+  const t = T[lang] || T.hi;
+  return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
       <div style={S.wrap}>
