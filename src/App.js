@@ -2,16 +2,6 @@ import { TRANSLATIONS } from './translations';
 import { useState } from "react";
 const T = TRANSLATIONS;
 
-// ─────────────────────────────────────────────────────────────
-// TANKHAPURAAN — COMPLETE APP
-// A product of Artha Technologies Pvt Ltd 🇮🇳
-// Built by a Proud Indian
-//
-// SCREEN FLOW:
-// lang_select → home → [myth_breaker | tool2] → result → payment → success
-// ─────────────────────────────────────────────────────────────
-
-// ── LANGUAGES ────────────────────────────────────────────────
 const LANGUAGES = [
   { code:"hi", name:"Hindi",     native:"हिन्दी",    region:"North India",         color:"#E07B39" },
   { code:"en", name:"English",   native:"English",   region:"All India",            color:"#2471A3" },
@@ -37,9 +27,6 @@ const LANGUAGES = [
   { code:"sd", name:"Sindhi",    native:"سنڌي",       region:"Rajasthan",            color:"#7C5CBF" },
 ];
 
-
-
-// ── MYTHS (10) ────────────────────────────────────────────────
 const MYTHS = [
   { id:1, icon:"👥", cat:"TAX",         verdict:"GALAT HAI",          color:"#E07B39", crowd:"\"Mere colleague ne old regime rakha, toh main bhi.\"",         cost:"₹8,000–₹25,000/yr",  truth:"Har insaan ka tax profile alag hota hai. Colleague ka decision tumhare liye kabhi kaam nahi karega.",          fix:"Apna khud ka tax calculate karo.", share:"\"Mere colleague ne old regime rakha toh main bhi\" — yeh soch mujhe ₹18,000 mehnga pad rahi thi. tankhapuraan.com" },
   { id:2, icon:"💼", cat:"CTC",         verdict:"DHOKA HAI",          color:"#C0392B", crowd:"\"Mera package 12 LPA hai.\"",                                    cost:"₹18,000–₹36,000/yr",  truth:"CTC aur take-home ALAG hain. 12 LPA ka matlab typically ₹75,000–₹82,000 in-hand — NOT ₹1 lakh.",          fix:"Apni actual in-hand salary pata karo.",  share:"\"12 LPA package hai\" — lekin haath mein ₹75,000 aate hain. CTC aur salary ALAG cheez hain. tankhapuraan.com" },
@@ -53,7 +40,6 @@ const MYTHS = [
   { id:10,icon:"🏛️", cat:"SALARY",      verdict:"HR TUMHARA DOST NAHI",color:"#2D9B6F",crowd:"\"HR ne bola standard structure hai — sab ka aisa hi hota hai.\"",cost:"₹24,000–₹1,20,000/yr",truth:"HR company ki taraf se negotiate karta hai — tumhari taraf se nahi. Salary structure negotiable hai.",      fix:"Salary slip decode karo.", share:"\"HR ne bola standard hai\" — HR company ke liye kaam karta hai, tumhare liye nahi. tankhapuraan.com" },
 ];
 
-// ── TAX MATH ──────────────────────────────────────────────────
 const SLAB_NEW=[{min:0,max:400000,rate:0},{min:400000,max:800000,rate:.05},{min:800000,max:1200000,rate:.10},{min:1200000,max:1600000,rate:.15},{min:1600000,max:2000000,rate:.20},{min:2000000,max:2400000,rate:.25},{min:2400000,max:Infinity,rate:.30}];
 const SLAB_OLD=[{min:0,max:250000,rate:0},{min:250000,max:500000,rate:.05},{min:500000,max:1000000,rate:.20},{min:1000000,max:Infinity,rate:.30}];
 function calcTax(inc,slabs){let t=0;for(const s of slabs){if(inc<=s.min)break;t+=(Math.min(inc,s.max)-s.min)*s.rate;}return Math.round(t*1.04);}
@@ -71,31 +57,27 @@ const fs=n=>n>=100000?`₹${(n/100000).toFixed(1)}L`:n>=1000?`₹${(n/1000).toFi
 const STEP_IDS=["salary","hra","rent","d80c","d80d","hl"];
 const EMOJIS=["💼","🏠","🔑","📊","🏥","🏡"];
 
-// ═════════════════════════════════════════════════════════════
-// MAIN APP
-// ═════════════════════════════════════════════════════════════
 export default function TankhaPuraan() {
-  const [lang, setLang]         = useState(null);
-  const [screen, setScreen]     = useState("home");
-  const [step, setStep]         = useState(0);
-  const [vals, setVals]         = useState({});
-  const [emailStep, setES]      = useState(false);
-  const [name, setName]         = useState("");
-  const [email, setEmail]       = useState("");
-  const [result, setResult]     = useState(null);
-  const [ldx, setLdx]           = useState(0);
-  const [ai, setAi]             = useState("");
-  const [mythOpen, setMythOpen] = useState(null);
+  const [lang, setLang]           = useState(null);
+  const [screen, setScreen]       = useState("home");
+  const [step, setStep]           = useState(0);
+  const [vals, setVals]           = useState({});
+  const [emailStep, setES]        = useState(false);
+  const [name, setName]           = useState("");
+  const [email, setEmail]         = useState("");
+  const [result, setResult]       = useState(null);
+  const [ldx, setLdx]             = useState(0);
+  const [ai, setAi]               = useState("");
+  const [mythOpen, setMythOpen]   = useState(null);
   const [mythsDone, setMythsDone] = useState(new Set());
-  const [paying, setPaying]     = useState(false);
-  const [copied, setCopied]     = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [paying, setPaying]       = useState(false);
+  const [copied, setCopied]       = useState(false);
+  const [menuOpen, setMenuOpen]   = useState(false);
 
   const t   = T[lang] || T.hi;
   const lg  = LANGUAGES.find(l=>l.code===lang) || LANGUAGES[0];
   const isRTL = ["ur","ks","sd"].includes(lang);
 
-  // ── Claude AI insight ──────────────────────────────────────
   async function getAI(r){
     const lname=LANGUAGES.find(l=>l.code===lang)?.name||"Hindi";
     try{
@@ -104,7 +86,6 @@ export default function TankhaPuraan() {
     }catch{return"";}
   }
 
-  // ── Submit form ────────────────────────────────────────────
   async function submit(){
     if(!name||!email)return;
     setScreen("loading");
@@ -114,7 +95,6 @@ export default function TankhaPuraan() {
     setResult(r);setAi(insight);setScreen("result");
   }
 
-  // ── Razorpay payment (demo) ────────────────────────────────
   async function pay(){
     setPaying(true);
     setTimeout(()=>{setPaying(false);setScreen("success");},2000);
@@ -122,7 +102,6 @@ export default function TankhaPuraan() {
 
   const prog=((step+1)/STEP_IDS.length)*100;
 
-  // ── SHARED NAV ─────────────────────────────────────────────
   function Nav({showMenu=true}){
     return(
       <div style={S.nav}>
@@ -150,9 +129,7 @@ export default function TankhaPuraan() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: LANGUAGE SELECT
-  // ══════════════════════════════════════════════════════════
+  // ── LANGUAGE SELECT ──────────────────────────────────────
   if(!lang) return(
     <div style={S.root}><style>{CSS}</style>
       <div style={S.langPage}>
@@ -178,21 +155,16 @@ export default function TankhaPuraan() {
     </div>
   );
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: HOME
-  // ══════════════════════════════════════════════════════════
+  // ── HOME ─────────────────────────────────────────────────
   if(screen==="home") return(
     <div style={{...S.root,direction:isRTL?"rtl":"ltr"}}><style>{CSS}</style>
       <Nav/>
       <div style={S.wrap}>
-        {/* Hero */}
         <div className="anim-1" style={{...S.heroBox,borderTopColor:lg.color}}>
           <div style={{...S.badge,color:lg.color,background:lg.color+"15",borderColor:lg.color+"33"}}>{t.badge}</div>
           <h1 style={S.h1}>{t.h1a}<br/><span style={{color:lg.color}}>{t.h1b}</span></h1>
           <p style={S.sub}>{t.sub}</p>
         </div>
-
-        {/* Pain cards */}
         <div className="anim-2">
           {t.pains.map((p,i)=>(
             <div key={i} style={{...S.painCard,borderLeftColor:lg.color}}>
@@ -201,8 +173,6 @@ export default function TankhaPuraan() {
             </div>
           ))}
         </div>
-
-        {/* Myth teaser */}
         <div className="anim-2" style={S.mythTeaser} onClick={()=>setScreen("myths")}>
           <span style={{fontSize:22}}>⚡</span>
           <div style={{flex:1}}>
@@ -211,14 +181,10 @@ export default function TankhaPuraan() {
           </div>
           <span style={{color:"#E07B39",fontWeight:700}}>→</span>
         </div>
-
-        {/* CTA */}
         <button className="anim-3 btn-p" style={{background:lg.color}} onClick={()=>{setStep(0);setVals({});setES(false);setScreen("form");}}>
           {t.cta}
         </button>
         <p style={S.safeNote}>{t.safe}</p>
-
-        {/* Tools grid */}
         <div style={{marginTop:28}}>
           <div style={S.secT}>5 Tools — Salaried India Ke Liye</div>
           {[
@@ -238,8 +204,6 @@ export default function TankhaPuraan() {
             </div>
           ))}
         </div>
-
-        {/* Footer */}
         <div style={S.footer}>
           <div style={{fontSize:12,color:"#B8A990"}}>A product of Artha Technologies Pvt Ltd</div>
           <div style={{fontSize:11,color:"#D4C4A8",marginTop:2}}>Built by a Proud Indian 🇮🇳</div>
@@ -248,14 +212,9 @@ export default function TankhaPuraan() {
       </div>
     </div>
   );
-  }
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: MYTH BREAKER
-  // ══════════════════════════════════════════════════════════
-  if(screen==="myths"){
-  const t = T[lang] || T.hi;
-  return(
+  // ── MYTH BREAKER ─────────────────────────────────────────
+  if(screen==="myths") return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
       <div style={S.wrap}>
@@ -263,7 +222,6 @@ export default function TankhaPuraan() {
           <div style={{fontSize:36,marginBottom:8}}>⚡</div>
           <h2 style={{fontFamily:"Georgia,serif",fontSize:24,color:"#2C2416",marginBottom:6}}>Bheed ki Galti</h2>
           <p style={{fontSize:13,color:"#8B7355",lineHeight:1.6,marginBottom:4}}>10 myths. Sab galat hain. Har ek ke neeche paisa doob raha hai.</p>
-          {/* Temple story */}
           <div style={{background:"#FFF8F3",border:"1px solid #F5D5BA",borderRadius:12,padding:"14px 16px",marginTop:12,textAlign:"left"}}>
             <span style={{fontSize:16}}>🛕</span>
             <p style={{fontSize:13,color:"#6B5740",lineHeight:1.65,fontStyle:"italic",marginTop:6}}>
@@ -272,8 +230,6 @@ export default function TankhaPuraan() {
             <p style={{fontSize:11,color:"#B8A990",marginTop:6}}>— Founder, TankhaPuraan · A Proud Indian 🇮🇳</p>
           </div>
         </div>
-
-        {/* Progress */}
         <div style={{background:"white",border:"1px solid #EEE5D6",borderRadius:12,padding:"12px 16px",marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
           <div style={{flex:1}}>
             <div style={{height:6,background:"#EEE5D6",borderRadius:3,overflow:"hidden"}}>
@@ -282,8 +238,6 @@ export default function TankhaPuraan() {
           </div>
           <div style={{fontFamily:"Georgia,serif",fontSize:18,fontWeight:700,color:"#E07B39",flexShrink:0}}>{mythsDone.size}/{MYTHS.length}</div>
         </div>
-
-        {/* Myth cards */}
         {MYTHS.map(myth=>(
           <div key={myth.id} style={{background:mythOpen===myth.id?myth.color+"0A":"white",border:`2px solid ${mythOpen===myth.id?myth.color:"#EEE5D6"}`,borderRadius:16,marginBottom:12,overflow:"hidden",cursor:"pointer",transition:"all 0.25s"}}
             onClick={()=>{setMythOpen(p=>p===myth.id?null:myth.id);setMythsDone(p=>new Set([...p,myth.id]));}}>
@@ -326,16 +280,13 @@ export default function TankhaPuraan() {
             )}
           </div>
         ))}
-
         <button className="btn-p" onClick={()=>setScreen("form")}>Tax Regime Free Mein Check Karo →</button>
         <div style={S.footer}><div style={{fontSize:11,color:"#B8A990"}}>Artha Technologies Pvt Ltd · Built by a Proud Indian 🇮🇳</div></div>
       </div>
     </div>
   );
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: FORM (Tax Calculator)
-  // ══════════════════════════════════════════════════════════
+  // ── FORM ─────────────────────────────────────────────────
   if(screen==="form") return(
     <div style={{...S.root,direction:isRTL?"rtl":"ltr"}}><style>{CSS}</style>
       <div style={{height:4,background:"#EEE5D6",position:"sticky",top:0,zIndex:10}}>
@@ -346,7 +297,6 @@ export default function TankhaPuraan() {
           <button style={S.backBtn} onClick={()=>step===0?setScreen("home"):emailStep?setES(false):setStep(s=>s-1)}>← Back</button>
           <button style={{...S.langBtn,color:lg.color}} onClick={()=>setLang(null)}>{lg.native} ▾</button>
         </div>
-
         {!emailStep?(
           <>
             <div style={{marginBottom:22}}>
@@ -394,9 +344,7 @@ export default function TankhaPuraan() {
     </div>
   );
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: LOADING
-  // ══════════════════════════════════════════════════════════
+  // ── LOADING ───────────────────────────────────────────────
   if(screen==="loading") return(
     <div style={S.root}><style>{CSS}</style>
       <div style={{maxWidth:480,margin:"0 auto",padding:"80px 20px",textAlign:"center"}}>
@@ -411,11 +359,8 @@ export default function TankhaPuraan() {
     </div>
   );
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: RESULT
-  // ══════════════════════════════════════════════════════════
+  // ── RESULT ────────────────────────────────────────────────
   if(screen==="result"&&result){
-    const t = T[lang] || T.hi;
     const{winner,saving,newTax,oldTax,takeNew,takeOld,ctc}=result;
     const wc=winner==="new"?"#2D9B6F":winner==="old"?"#2471A3":"#8B7355";
     const wLabel=winner==="new"?t.rNew:winner==="old"?t.rOld:"Equal";
@@ -423,7 +368,6 @@ export default function TankhaPuraan() {
       <div style={{...S.root,direction:isRTL?"rtl":"ltr"}}><style>{CSS}</style>
         <Nav/>
         <div style={S.wrap}>
-          {/* Winner */}
           <div style={{background:wc+"0D",border:`2px solid ${wc}`,borderRadius:18,padding:22,marginBottom:14,textAlign:"center"}}>
             <div style={{fontSize:10,fontWeight:700,letterSpacing:2,color:wc,marginBottom:6}}>{t.rBetter}</div>
             <div style={{fontFamily:"Georgia,serif",fontSize:26,fontWeight:700,color:wc,marginBottom:10}}>{wLabel} ✅</div>
@@ -434,8 +378,6 @@ export default function TankhaPuraan() {
               </div>
             )}
           </div>
-
-          {/* AI insight */}
           {ai&&(
             <div style={{background:"#FFF8F3",border:"1.5px solid #F5D5BA",borderRadius:14,padding:18,marginBottom:14}}>
               <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
@@ -445,8 +387,6 @@ export default function TankhaPuraan() {
               <p style={{fontSize:14,color:"#4A3728",lineHeight:1.75}}>{ai}</p>
             </div>
           )}
-
-          {/* Which myth were you living? */}
           <div style={{background:"#2C2416",borderRadius:14,padding:18,marginBottom:14,cursor:"pointer"}} onClick={()=>setScreen("myths")}>
             <div style={{fontSize:10,fontWeight:700,color:"#E07B39",letterSpacing:2,marginBottom:8}}>BHEED KI GALTI — KYA YAHI SOCH THE TUM?</div>
             <p style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:14,color:"#D4C4A8",lineHeight:1.65}}>
@@ -456,8 +396,6 @@ export default function TankhaPuraan() {
             </p>
             <div style={{fontSize:12,color:"#E07B39",marginTop:8}}>Baaki 10 myths dekho → ⚡</div>
           </div>
-
-          {/* Compare */}
           <div style={{background:"white",border:"1.5px solid #EEE5D6",borderRadius:14,padding:18,marginBottom:14}}>
             <div style={S.secT}>{t.rCompare}</div>
             <div style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid #F5EDE0",marginBottom:14}}>
@@ -477,8 +415,6 @@ export default function TankhaPuraan() {
             </div>
             {saving>0&&<div style={{background:"#F0FBF6",border:"1px solid #B8E8D0",borderRadius:8,padding:10,fontSize:12}}>💰 {t.rSaving}: <strong>{ff(saving)}{t.rYear}</strong></div>}
           </div>
-
-          {/* PDF Upsell */}
           <div style={{background:"#2C2416",borderRadius:18,padding:22,marginBottom:14}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
               <div style={{fontFamily:"Georgia,serif",fontSize:16,fontWeight:700,color:"#FBF7F0",flex:1}}>{t.rUTitle}</div>
@@ -490,15 +426,12 @@ export default function TankhaPuraan() {
             <button className="btn-p" style={{background:lg.color,marginBottom:4}} onClick={()=>setScreen("payment")}>{t.rUBtn}</button>
             <p style={{fontSize:10,color:"#6B5740",textAlign:"center"}}>Razorpay · UPI / Card / Net Banking</p>
           </div>
-
-          {/* Share */}
           <div style={{background:"white",border:"1.5px solid #EEE5D6",borderRadius:14,padding:18,marginBottom:14,textAlign:"center"}}>
             <p style={{fontSize:13,color:"#6B5740",marginBottom:10}}>{t.rShare}</p>
             <button className="btn-g" onClick={()=>{navigator.clipboard?.writeText(`Maine TankhaPuraan pe tax regime check kiya — ${wLabel} mujhare liye better hai${saving>0?`, aur ${ff(saving)} bachaunga`:""} is saal. Free mein check karo: tankhapuraan.com 🙏`);setCopied("share");setTimeout(()=>setCopied(null),2000);}}>
               {copied==="share"?"✅ Copied!":t.rShareBtn}
             </button>
           </div>
-
           <button style={{background:"none",border:"none",fontSize:12,color:"#B8A990",cursor:"pointer",display:"block",margin:"0 auto",textDecoration:"underline"}}
             onClick={()=>{setScreen("home");setVals({});setStep(0);setES(false);setResult(null);}}>
             {t.rRecalc}
@@ -509,12 +442,8 @@ export default function TankhaPuraan() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: PAYMENT
-  // ══════════════════════════════════════════════════════════
-  if(screen==="payment"){
-  const t = T[lang] || T.hi;
-  return(
+  // ── PAYMENT ───────────────────────────────────────────────
+  if(screen==="payment") return(
     <div style={S.root}><style>{CSS}</style>
       <div style={S.nav}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -524,7 +453,6 @@ export default function TankhaPuraan() {
         <div style={{fontSize:12,fontWeight:600,color:"#2D9B6F",background:"#F0FBF6",border:"1px solid #B8E8D0",borderRadius:20,padding:"4px 12px"}}>🔒 Secure Checkout</div>
       </div>
       <div style={S.wrap}>
-        {/* Result recap */}
         {result&&(
           <div style={{background:"#2C2416",borderRadius:14,padding:18,marginBottom:20}}>
             <div style={{fontSize:10,fontWeight:700,color:"#E07B39",letterSpacing:2,marginBottom:12}}>AAPKA FREE RESULT</div>
@@ -538,8 +466,6 @@ export default function TankhaPuraan() {
             </div>
           </div>
         )}
-
-        {/* What you get */}
         <div style={S.secT}>PDF Report Mein Kya Milega?</div>
         {[{e:"📊",t:"Complete Regime Breakdown",d:"Old vs New — every rupee explained"},{e:"✅",t:"3 Action Steps for This FY",d:"Exactly what to tell your HR"},{e:"🏢",t:"HR Portal Guide",d:"Step-by-step switch instructions"},{e:"💡",t:"Tax Saving Tips",d:"What to do before March 31"},{e:"📅",t:"Next Year Planning",d:"FY 2026-27 investment roadmap"},{e:"🔏",t:"Professional Format",d:"Shareable with CA or HR"}].map((f,i)=>(
           <div key={i} style={{background:"white",border:"1px solid #EEE5D6",borderRadius:12,padding:"12px 14px",marginBottom:8,display:"flex",gap:10,alignItems:"flex-start"}}>
@@ -547,8 +473,6 @@ export default function TankhaPuraan() {
             <div><div style={{fontSize:13,fontWeight:700,color:"#2C2416",marginBottom:2}}>{f.t}</div><div style={{fontSize:12,color:"#8B7355"}}>{f.d}</div></div>
           </div>
         ))}
-
-        {/* Price */}
         <div style={{background:"white",border:`2px solid ${lg.color}`,borderRadius:14,padding:18,marginBottom:14,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
           <div>
             <div style={{fontSize:12,color:"#B8A990",textDecoration:"line-through",marginBottom:3}}>CA fee: ₹2,000–₹5,000</div>
@@ -560,16 +484,12 @@ export default function TankhaPuraan() {
             <div style={{fontSize:10,color:"#B8A990"}}>incl. GST</div>
           </div>
         </div>
-
-        {/* ROI nudge */}
         {result?.saving>0&&(
           <div style={{background:"#F0FBF6",border:"1px solid #B8E8D0",borderRadius:10,padding:"12px 14px",marginBottom:16,display:"flex",gap:10,alignItems:"flex-start"}}>
             <span style={{fontSize:18}}>💡</span>
             <p style={{fontSize:13,color:"#2C2416",lineHeight:1.6}}>Aap iss report se <strong style={{color:"#2D9B6F"}}>{ff(result.saving)}</strong> bachayenge. Report ki cost <strong>pehli week mein wapas.</strong></p>
           </div>
         )}
-
-        {/* Pay button */}
         <button className="btn-p" style={{background:paying?"#B8A990":lg.color,boxShadow:`0 4px 20px ${lg.color}30`}} onClick={pay} disabled={paying}>
           {paying?(
             <span style={{display:"flex",alignItems:"center",gap:10,justifyContent:"center"}}>
@@ -577,21 +497,16 @@ export default function TankhaPuraan() {
             </span>
           ):"₹199 Mein PDF Report Lo → UPI / Card / Net Banking"}
         </button>
-
-        {/* Payment methods */}
         <div style={{display:"flex",gap:6,flexWrap:"wrap",justifyContent:"center",margin:"10px 0"}}>
           {["UPI","GPay","PhonePe","Paytm","Card","Net Banking"].map(m=>(
             <div key={m} style={{background:"white",border:"1px solid #EEE5D6",borderRadius:8,padding:"3px 8px",fontSize:11,color:"#6B5740"}}>{m}</div>
           ))}
         </div>
-
-        {/* Trust */}
         <div style={{display:"flex",gap:10,flexWrap:"wrap",justifyContent:"center",marginBottom:16}}>
-          {["🔒 256-bit SSL","✅ Razorpay","📧 Instant Email","↩️ 7-day Refund"].map(t=>(
-            <div key={t} style={{fontSize:11,color:"#8B7355"}}>{t}</div>
+          {["🔒 256-bit SSL","✅ Razorpay","📧 Instant Email","↩️ 7-day Refund"].map(tr=>(
+            <div key={tr} style={{fontSize:11,color:"#8B7355"}}>{tr}</div>
           ))}
         </div>
-
         <button style={{background:"none",border:"none",fontSize:12,color:"#B8A990",cursor:"pointer",display:"block",margin:"0 auto",textDecoration:"underline"}} onClick={()=>setScreen("result")}>
           Abhi nahi, result pe wapas jao
         </button>
@@ -599,14 +514,9 @@ export default function TankhaPuraan() {
       </div>
     </div>
   );
-  }
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: SUCCESS
-  // ══════════════════════════════════════════════════════════
-  if(screen==="success"){
-  const t = T[lang] || T.hi;
-  return(
+  // ── SUCCESS ───────────────────────────────────────────────
+  if(screen==="success") return(
     <div style={S.root}><style>{CSS}</style>
       <Nav showMenu={false}/>
       <div style={S.wrap}>
@@ -615,11 +525,9 @@ export default function TankhaPuraan() {
           <h1 style={{fontFamily:"Georgia,serif",fontSize:26,fontWeight:700,color:"#2D9B6F",marginBottom:8}}>Payment Ho Gayi!</h1>
           <p style={{fontSize:15,color:"#6B5740",lineHeight:1.65}}>{name}, aapki report tayyar ho rahi hai.<br/>2 minute mein {email} pe aa jaayegi.</p>
         </div>
-
-        {/* Next steps */}
         <div style={{background:"white",border:"1.5px solid #EEE5D6",borderRadius:14,padding:18,marginBottom:14}}>
           <div style={S.secT}>Aage Kya Hoga?</div>
-          {[{e:"📧",t:"2 minutes mein",d:`PDF ${email} pe bhej di jaayegi`},{e:"📄",t:"Abhi",d:"Download button neeche hai"},{e:"🏢",t:"Kal tak",d:`HR ko batao — ${result?.winner==="new"?t.rNew:t.rOld} choose karo`},{e:"💰",t:"Is saal",d:`${result?.saving>0?ff(result.saving)+" bachao":"Smart decision liya"}`,}].map((s,i)=>(
+          {[{e:"📧",t:"2 minutes mein",d:`PDF ${email} pe bhej di jaayegi`},{e:"📄",t:"Abhi",d:"Download button neeche hai"},{e:"🏢",t:"Kal tak",d:`HR ko batao — ${result?.winner==="new"?t.rNew:t.rOld} choose karo`},{e:"💰",t:"Is saal",d:`${result?.saving>0?ff(result.saving)+" bachao":"Smart decision liya"}`}].map((s,i)=>(
             <div key={i} style={{display:"flex",gap:12,alignItems:"center",padding:"10px 0",borderBottom:"1px solid #F5EDE0"}}>
               <span style={{fontSize:20,flexShrink:0}}>{s.e}</span>
               <div style={{flex:1}}>
@@ -630,11 +538,7 @@ export default function TankhaPuraan() {
             </div>
           ))}
         </div>
-
-        {/* Download */}
         <button className="btn-p" style={{background:"#2D9B6F",marginBottom:14}}>📥 PDF Report Download Karo</button>
-
-        {/* Share nudge — viral moment */}
         <div style={{background:"#2C2416",borderRadius:16,padding:20,marginBottom:14}}>
           <div style={{fontFamily:"Georgia,serif",fontSize:16,fontWeight:700,color:"#FBF7F0",marginBottom:8}}>🎉 Kisi dost ko bhi batao?</div>
           <p style={{fontSize:13,color:"#8B7355",lineHeight:1.6,marginBottom:12}}>Ek message se kisi ka ₹20,000+ bach sakta hai.</p>
@@ -646,8 +550,6 @@ export default function TankhaPuraan() {
           </div>
           <button className="whatsapp-btn">📲 WhatsApp Pe Share Karo</button>
         </div>
-
-        {/* Other tools */}
         <div style={S.secT}>Aur Kya Jaanna Chahoge?</div>
         {[{e:"📄",n:"Salary Slip Decoder",d:"Har line ka matlab samjho",p:"₹99"},{e:"🔍",n:"Am I Underpaid?",d:"Market mein teri value kya hai",p:"₹149"},{e:"🗣️",n:"Negotiation Script",d:"Appraisal mein sahi bolo",p:"₹199"}].map((tool,i)=>(
           <div key={i} style={{...S.toolRow,cursor:"default"}}>
@@ -656,19 +558,13 @@ export default function TankhaPuraan() {
             <div style={{fontSize:12,fontWeight:700,color:"#E07B39",background:"#FFF4EC",padding:"4px 10px",borderRadius:20}}>{tool.p}</div>
           </div>
         ))}
-
         <div style={S.footer}><div style={{fontSize:11,color:"#B8A990"}}>Artha Technologies Pvt Ltd · Built by a Proud Indian 🇮🇳</div></div>
       </div>
     </div>
   );
-  }
 
-  // ══════════════════════════════════════════════════════════
-  // SCREEN: ABOUT
-  // ══════════════════════════════════════════════════════════
-  if(screen==="about"){
-  const t = T[lang] || T.hi;
-  return(
+  // ── ABOUT ─────────────────────────────────────────────────
+  if(screen==="about") return(
     <div style={S.root}><style>{CSS}</style>
       <Nav/>
       <div style={S.wrap}>
@@ -677,7 +573,6 @@ export default function TankhaPuraan() {
           <h1 style={{fontFamily:"Georgia,serif",fontSize:26,fontWeight:700,color:"#2C2416",marginBottom:6}}>TankhaPuraan</h1>
           <div style={{fontSize:12,color:"#B8A990",letterSpacing:2,textTransform:"uppercase"}}>The Holy Scripture of Your Salary</div>
         </div>
-
         <div style={{background:"#FFF8F3",border:"1.5px solid #F5D5BA",borderTop:"4px solid #E07B39",borderRadius:16,padding:"22px",marginBottom:16}}>
           <div style={S.secT}>Our Story</div>
           <p style={{fontSize:14,color:"#4A3728",lineHeight:1.85}}>
@@ -688,13 +583,11 @@ export default function TankhaPuraan() {
             <strong>TankhaPuraan is the myth-breaker.</strong> The one tool that stands firmly on the employee's side — always.
           </p>
         </div>
-
         <div style={{background:"#2C2416",borderRadius:16,padding:"22px",marginBottom:16,textAlign:"center"}}>
           <div style={{fontFamily:"Georgia,serif",fontSize:20,color:"#FBF7F0",marginBottom:6}}>Built by a Proud Indian</div>
           <div style={{fontSize:40,marginBottom:8}}>🇮🇳</div>
           <div style={{fontSize:13,color:"#8B7355",lineHeight:1.7}}>No founder name. No personal brand.<br/>Just the work. Just the truth.</div>
         </div>
-
         <div style={{background:"white",border:"1.5px solid #EEE5D6",borderRadius:16,padding:"22px",marginBottom:16}}>
           <div style={S.secT}>Our Values</div>
           {[{e:"⚖️",t:"Legal & Legitimate",d:"Everything we build follows the law. No shortcuts. No grey areas."},
@@ -707,24 +600,20 @@ export default function TankhaPuraan() {
             </div>
           ))}
         </div>
-
         <div style={{background:"#FBF7F0",border:"1px solid #EEE5D6",borderRadius:14,padding:"18px",marginBottom:16,textAlign:"center"}}>
           <div style={S.secT}>A Product of</div>
           <div style={{fontFamily:"Georgia,serif",fontSize:22,fontWeight:700,color:"#2C2416",marginBottom:4}}>Artha Technologies Pvt Ltd</div>
           <div style={{fontSize:13,color:"#8B7355",marginBottom:4}}>अर्थ — Meaning + Prosperity</div>
           <div style={{fontSize:12,color:"#B8A990"}}>hello@tankhapuraan.com</div>
         </div>
-
         <div style={S.footer}><div style={{fontSize:11,color:"#B8A990"}}>© 2026 Artha Technologies Pvt Ltd · Built by a Proud Indian 🇮🇳</div></div>
       </div>
     </div>
   );
-  }
 
   return null;
 }
 
-// ── STYLES ────────────────────────────────────────────────────
 const S={
   root:    {fontFamily:"'Hind','Segoe UI',sans-serif",background:"#FBF7F0",minHeight:"100vh",color:"#2C2416"},
   langPage:{maxWidth:520,margin:"0 auto",padding:"36px 20px 52px"},
