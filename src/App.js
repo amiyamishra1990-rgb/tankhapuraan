@@ -692,7 +692,12 @@ export default function App() {
         {/* HEADER */}
         <header className="header">
           <div className="brand">
-            <div className="brand-icon">📜</div>
+            <img
+              src="/logo.png"
+              alt="TankhaPuraan"
+              style={{ height: 38, width: 38, objectFit: "contain", borderRadius: 8 }}
+              onError={e => { e.target.style.display='none'; }}
+            />
             <div className="brand-name">Tankha<span>Puraan</span></div>
           </div>
           <select
@@ -710,7 +715,7 @@ export default function App() {
         <section className="hero">
           <span className="hero-om">🕉</span>
           <h1 className="hero-title">
-            {s("heroTitle") || "Consult the"} <span>TankhaPuraan</span>
+            Consult the <span>TankhaPuraan</span>
           </h1>
           <p className="hero-tagline">"{s("tagline")}"</p>
           <p className="hero-sub">{s("sub")}</p>
