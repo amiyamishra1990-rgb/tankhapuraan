@@ -869,7 +869,7 @@ export default function App() {
                       {s("pdfReportTitle") || "Apni Full Tax Report PDF Mein Chahiye?"}
                     </div>
                     <p className="pdf-cta-sub">
-                      {s("pdfReportSub") || "8-page personalized report — delivered to your email in 10 minutes."}
+                      8-page personalized report — delivered to your email in 10 minutes.
                     </p>
                     <ul className="pdf-features">
                       <li>{s("pdfSection1") || "Slab-by-slab breakdown"}</li>
@@ -881,7 +881,7 @@ export default function App() {
                       <li>{s("pdfSection7") || "FY 2025-26 | AY 2026-27"}</li>
                     </ul>
                     <button className="pdf-btn" onClick={handlePDFClick}>
-                      📥 {s("getReport") || "PDF Report Lein"} — ₹199
+                      📥 {s("getReport") || "PDF Report Lein — ₹199"}
                     </button>
                     <p className="pdf-trust">
                       🔒 Secure payment via Razorpay &nbsp;•&nbsp; Email in 10 mins &nbsp;•&nbsp; Auto-refund if failed
