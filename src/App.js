@@ -725,7 +725,18 @@ export default function App() {
   };
 
   const handlePDFClick = () => {
-    window.open("https://rzp.io/rzp/QRzNrdB0", "_blank");
+    const base = "https://rzp.io/rzp/QRzNrdB0";
+    const params = new URLSearchParams({
+      "notes[annual_ctc]":       income || "0",
+      "notes[basic_salary]":     String(Math.round(parseFloat(income || 0) * 0.40)),
+      "notes[hra_received]":     hra || "0",
+      "notes[city_type]":        "non-metro",
+      "notes[deductions_80c]":   ded80c || "0",
+      "notes[other_income]":     otherDed || "0",
+      "notes[preferred_regime]": result?.winner || "auto",
+      "notes[financial_year]":   "FY2025-26",
+    });
+    window.open(base + "?" + params.toString(), "_blank");
   };
 
   return (
