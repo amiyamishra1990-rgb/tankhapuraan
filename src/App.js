@@ -477,61 +477,105 @@ const styles = `
 
   /* PDF CTA */
   .pdf-cta {
-    background: linear-gradient(135deg, ${C.gold}22, ${C.goldSoft}11);
-    border: 1.5px solid ${C.goldSoft};
-    border-radius: 14px;
-    padding: 24px;
-    margin-top: 4px;
+    background: linear-gradient(135deg, ${C.sindoorDark} 0%, ${C.sindoor} 100%);
+    border-radius: 16px;
+    padding: 28px 24px;
+    margin-top: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(124,19,22,0.25);
+  }
+
+  .pdf-cta::before {
+    content: '📜';
+    position: absolute;
+    top: -16px; right: -16px;
+    font-size: 90px;
+    opacity: 0.07;
+    transform: rotate(15deg);
+    pointer-events: none;
+  }
+
+  .pdf-cta-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: ${C.goldLight};
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
   }
 
   .pdf-cta-title {
     font-family: 'Playfair Display', serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: ${C.ink};
-    margin-bottom: 14px;
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .pdf-cta-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 18px;
+    line-height: 1.6;
   }
 
   .pdf-features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
     list-style: none;
   }
 
   .pdf-features li {
-    font-size: 13px;
-    color: ${C.ink};
+    font-size: 12px;
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.12);
+    padding: 4px 12px;
+    border-radius: 20px;
     display: flex;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: center;
+    gap: 5px;
   }
 
   .pdf-features li::before {
-    content: '✦';
-    color: ${C.gold};
+    content: '✅';
     flex-shrink: 0;
-    margin-top: 1px;
     font-size: 11px;
   }
 
   .pdf-btn {
     width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, ${C.gold}, ${C.goldSoft});
-    color: ${C.ink};
+    padding: 17px;
+    background: ${C.goldLight};
+    color: ${C.sindoorDark};
     border: none;
-    border-radius: 11px;
-    font-size: 15px;
-    font-weight: 700;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 800;
     cursor: pointer;
     transition: transform 0.15s, box-shadow 0.15s;
     font-family: 'Inter', sans-serif;
     letter-spacing: 0.3px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
   }
 
-  .pdf-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(184,134,11,0.3); }
+  .pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+  .pdf-btn:active { transform: translateY(0); }
+
+  .pdf-trust {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 12px;
+  }
 
   .disclaimer {
     margin-top: 14px;
@@ -681,7 +725,7 @@ export default function App() {
   };
 
   const handlePDFClick = () => {
-    window.open("https://razorpay.me/@tankhapuraan", "_blank");
+    window.open("https://rzp.io/rzp/QRzNrdB0", "_blank");
   };
 
   return (
@@ -820,21 +864,28 @@ export default function App() {
 
                   {/* PDF CTA */}
                   <div className="pdf-cta">
+                    <div className="pdf-cta-badge">📜 TankhaPuraan Report</div>
                     <div className="pdf-cta-title">
-                      📋 {s("pdfReportTitle") || "What's in your ₹199 PDF Report?"}
+                      {s("pdfReportTitle") || "Apni Full Tax Report PDF Mein Chahiye?"}
                     </div>
+                    <p className="pdf-cta-sub">
+                      {s("pdfReportSub") || "8-page personalized report — delivered to your email in 10 minutes."}
+                    </p>
                     <ul className="pdf-features">
-                      <li>{s("pdfSection1") || "Full slab-by-slab tax breakdown"}</li>
-                      <li>{s("pdfSection2") || "Exact verdict — which regime saves more"}</li>
+                      <li>{s("pdfSection1") || "Slab-by-slab breakdown"}</li>
+                      <li>{s("pdfSection2") || "Old vs New verdict"}</li>
                       <li>{s("pdfSection3") || "Monthly take-home impact"}</li>
-                      <li>{s("pdfSection4") || "Deduction Optimizer — 3 legal moves"}</li>
-                      <li>{s("pdfSection5") || "Copy-paste HR declaration to switch regime"}</li>
-                      <li>{s("pdfSection6") || "Next year tax planning tips"}</li>
-                      <li>{s("pdfSection7") || "Valid for FY 2025-26 | AY 2026-27"}</li>
+                      <li>{s("pdfSection4") || "Deduction Optimizer"}</li>
+                      <li>{s("pdfSection5") || "HR declaration (copy-paste ready)"}</li>
+                      <li>{s("pdfSection6") || "Next year planner"}</li>
+                      <li>{s("pdfSection7") || "FY 2025-26 | AY 2026-27"}</li>
                     </ul>
                     <button className="pdf-btn" onClick={handlePDFClick}>
-                      {s("getReport")} ✦
+                      📥 {s("getReport") || "PDF Report Lein"} — ₹199
                     </button>
+                    <p className="pdf-trust">
+                      🔒 Secure payment via Razorpay &nbsp;•&nbsp; Email in 10 mins &nbsp;•&nbsp; Auto-refund if failed
+                    </p>
                   </div>
 
                   <p className="disclaimer">⚠ {s("disclaimer")}</p>
