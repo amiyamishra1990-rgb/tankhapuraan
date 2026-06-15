@@ -727,14 +727,13 @@ export default function App() {
   const handlePDFClick = () => {
     const base = "https://rzp.io/rzp/QRzNrdB0";
     const params = new URLSearchParams({
-      "notes[annual_ctc]":       income || "0",
-      "notes[basic_salary]":     String(Math.round(parseFloat(income || 0) * 0.40)),
-      "notes[hra_received]":     hra || "0",
-      "notes[city_type]":        "non-metro",
-      "notes[deductions_80c]":   ded80c || "0",
-      "notes[other_income]":     otherDed || "0",
-      "notes[preferred_regime]": result?.winner || "auto",
-      "notes[financial_year]":   "FY2025-26",
+      "notes[annual_ctc]":        income || "0",
+      "notes[hra_received]":      hra || "0",
+      "notes[rent_paid]":         String(Math.round(parseFloat(hra || 0) * 1.33)),
+      "notes[metro_city]":        "no",
+      "notes[section_80c]":       ded80c || "0",
+      "notes[section_80d]":       med80d || "0",
+      "notes[other_deductions]":  otherDed || "0",
     });
     window.open(base + "?" + params.toString(), "_blank");
   };
