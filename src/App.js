@@ -725,18 +725,36 @@ export default function App() {
   };
 
   const handlePDFClick = () => {
-    const base = "https://rzp.io/rzp/QRzNrdB0";
-    const params = new URLSearchParams({
-      "notes[annual_ctc]":        income || "0",
-      "notes[hra_received]":      hra || "0",
-      "notes[rent_paid]":         String(Math.round(parseFloat(hra || 0) * 1.33)),
-      "notes[metro_city]":        "no",
-      "notes[section_80c]":       ded80c || "0",
-      "notes[section_80d]":       med80d || "0",
-      "notes[other_deductions]":  otherDed || "0",
-    });
-    window.open(base + "?" + params.toString(), "_blank");
+  const options = {
+    key: "rzp_live_T0o9KcbQlYwweH",
+    amount: 19900,
+    currency: "INR",
+    name: "TankhaPuraan",
+    description: "Tax Regime Calculator — PDF Report",
+    image: "/logo.png",
+    handler: function(response) {
+      alert("Payment successful! Your PDF report will be emailed within 10 minutes. Payment ID: " + response.razorpay_payment_id);
+    },
+    prefill: {
+      email: "",
+      contact: "",
+    },
+    notes: {
+      annual_ctc: income || "0",
+      hra_received: hra || "0",
+      rent_paid: String(Math.round(parseFloat(hra || 0) * 1.33)),
+      metro_city: "no",
+      section_80c: ded80c || "0",
+      section_80d: med80d || "0",
+      other_deductions: otherDed || "0",
+    },
+    theme: {
+      color: "#7C1316",
+    },
   };
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
 
   return (
     <>
