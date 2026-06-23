@@ -278,6 +278,14 @@ export default function App() {
     setLoading(true);
 
     try {
+      // Combine NPS + Home Loan + Other into other_deductions
+      // so server.js receives the same total the website calculator used
+      const combinedOtherDed = String(
+        (parseFloat(nps)      || 0) +
+        (parseFloat(homeLoan) || 0) +
+        (parseFloat(otherDed) || 0)
+      );
+
       // Step 1 — Create Razorpay Order via Railway backend
       const orderRes = await fetch(`${BACKEND_URL}/create-order`, {
         method: "POST",
@@ -287,13 +295,13 @@ export default function App() {
         body: JSON.stringify({
           full_name:        userName,
           email:            userEmail,
-          annual_ctc:       income     || "0",
-          hra_received:     hra        || "0",
-          rent_paid:        String(Math.round(parseFloat(hra || 0) * 1.33)),
-          metro_city:       "no",
-          section_80c:      ded80c     || "0",
-          section_80d:      med80d     || "0",
-          other_deductions: otherDed   || "0",
+          annual_ctc:       income        || "0",
+          hra_received:     hra           || "0",
+          rent_paid:        hra           || "0",   // use HRA as rent_paid proxy
+          metro_city:       "false",
+          section_80c:      ded80c        || "0",   // 80C investments
+          section_80d:      med80d        || "0",   // Medical insurance
+          other_deductions: combinedOtherDed,       // NPS + Home Loan + Other
           language:         lang,
         }),
       });
@@ -340,7 +348,6 @@ export default function App() {
       console.error(err);
     }
   };
-
   return (
     <>
       <style>{styles}</style>
