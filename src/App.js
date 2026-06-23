@@ -1,7 +1,7 @@
-// App.js — TankhaPuraan Production Frontend v7
+// App.js — TankhaPuraan Production Frontend v8
 // Artha Technologies Pvt Ltd
 // "The Holy Scripture of Your Salary"
-// v7: New dashboard, 8 products, Name+Email modal, Orders API, Bundle section, 22 languages
+// v8: Fixed deduction matching — HRA exemption passed directly, numbers match website
 
 import { useState, useMemo } from "react";
 import { LANGS, t, isRTL } from "./translations";
@@ -27,7 +27,6 @@ const C = {
 };
 
 const BACKEND_URL = "https://tankhapuraan-backend-production.up.railway.app";
-const BACKEND_SECRET = "TPbackend2026";
 const RAZORPAY_KEY = "rzp_live_T0o9KcbQlYwweH";
 
 // ─── TAX MATH ─────────────────────────────────────────────────────────────────
@@ -253,6 +252,9 @@ export default function App() {
   const rtl = isRTL(lang);
   const s   = (key) => t(lang, key);
 
+  // ── Total deductions for website calculator ──
+  // App.js form field "HRA Exemption" = user enters pre-calculated HRA exemption directly
+  // This is used as-is in the website calculator (no HRA formula applied)
   const totalDeductions = useMemo(() => {
     return [ded80c, hra, nps, homeLoan, med80d, otherDed]
       .map(v => parseFloat(v) || 0)
@@ -278,40 +280,33 @@ export default function App() {
     setLoading(true);
 
     try {
-      // Combine NPS + Home Loan + Other into other_deductions
-      // so server.js receives the same total the website calculator used
-   // Combine ALL deductions — exact same total website calculator uses
-const combinedOtherDed = String(
-  (parseFloat(ded80c)   || 0) +
-  (parseFloat(hra)      || 0) +
-  (parseFloat(nps)      || 0) +
-  (parseFloat(homeLoan) || 0) +
-  (parseFloat(med80d)   || 0) +
-  (parseFloat(otherDed) || 0)
-);
-// ...
-hra_received:     "0",            // skip — already in combinedOtherDed
-rent_paid:        "0",            // skip — no HRA formula recalculation
-section_80c:      "0",            // skip — already in combinedOtherDed
-section_80d:      "0",            // skip — already in combinedOtherDed
-other_deductions: combinedOtherDed,
+      // ── THE KEY FIX (v8) ──────────────────────────────────────────────────
+      // App.js "HRA Exemption" field = user enters the final HRA exemption
+      // directly (not hra_received or rent_paid). Pass it as part of
+      // other_deductions so server.js uses it as-is without recalculating.
+      // This guarantees PDF numbers match website calculator exactly.
+      // ─────────────────────────────────────────────────────────────────────
+      const allOtherDeductions = String(
+        (parseFloat(hra)      || 0) +   // HRA exemption (already calculated by user)
+        (parseFloat(nps)      || 0) +   // NPS 80CCD
+        (parseFloat(homeLoan) || 0) +   // Home Loan Interest
+        (parseFloat(otherDed) || 0)     // Other deductions
+      );
 
       // Step 1 — Create Razorpay Order via Railway backend
       const orderRes = await fetch(`${BACKEND_URL}/create-order`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           full_name:        userName,
           email:            userEmail,
-          annual_ctc:       income        || "0",
-          hra_received:     hra           || "0",
-          rent_paid:        hra           || "0",   // use HRA as rent_paid proxy
+          annual_ctc:       income             || "0",
+          hra_received:     "0",   // skip server HRA recalculation
+          rent_paid:        "0",   // skip server HRA recalculation
           metro_city:       "false",
-          section_80c:      ded80c        || "0",   // 80C investments
-          section_80d:      med80d        || "0",   // Medical insurance
-          other_deductions: combinedOtherDed,       // NPS + Home Loan + Other
+          section_80c:      ded80c             || "0",
+          section_80d:      med80d             || "0",
+          other_deductions: allOtherDeductions,
           language:         lang,
         }),
       });
@@ -358,6 +353,7 @@ other_deductions: combinedOtherDed,
       console.error(err);
     }
   };
+
   return (
     <>
       <style>{styles}</style>
