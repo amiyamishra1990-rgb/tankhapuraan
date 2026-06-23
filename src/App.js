@@ -280,11 +280,21 @@ export default function App() {
     try {
       // Combine NPS + Home Loan + Other into other_deductions
       // so server.js receives the same total the website calculator used
-      const combinedOtherDed = String(
-        (parseFloat(nps)      || 0) +
-        (parseFloat(homeLoan) || 0) +
-        (parseFloat(otherDed) || 0)
-      );
+   // Combine ALL deductions — exact same total website calculator uses
+const combinedOtherDed = String(
+  (parseFloat(ded80c)   || 0) +
+  (parseFloat(hra)      || 0) +
+  (parseFloat(nps)      || 0) +
+  (parseFloat(homeLoan) || 0) +
+  (parseFloat(med80d)   || 0) +
+  (parseFloat(otherDed) || 0)
+);
+// ...
+hra_received:     "0",            // skip — already in combinedOtherDed
+rent_paid:        "0",            // skip — no HRA formula recalculation
+section_80c:      "0",            // skip — already in combinedOtherDed
+section_80d:      "0",            // skip — already in combinedOtherDed
+other_deductions: combinedOtherDed,
 
       // Step 1 — Create Razorpay Order via Railway backend
       const orderRes = await fetch(`${BACKEND_URL}/create-order`, {
