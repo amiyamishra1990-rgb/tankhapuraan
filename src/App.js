@@ -515,8 +515,8 @@ export default function App() {
               {BUNDLE_PRODUCTS.map(p => (<span className="bundle-chip" key={p.id}>{p.name} {p.price}</span>))}
             </div>
             <div className="bundle-original">Total value: {inr(BUNDLE_ORIGINAL)}</div>
-            <div className="bundle-price">₹2,001</div>
-            <div className="bundle-save">↑ Save {inr(BUNDLE_ORIGINAL - 2001)} · Khata Puraan subscription alag</div>
+            <div className="bundle-price">₹{BUNDLE_PRICE.toLocaleString('en-IN')}</div>
+            <div className="bundle-save">↑ Save {inr(BUNDLE_ORIGINAL - BUNDLE_PRICE)} · Khata Puraan subscription alag</div>
             <a href="#calculator" className="btn-gold" style={{fontSize:"17px", padding:"15px 36px"}}>📜 Get the Complete Bundle →</a>
           </div>
         </section>
