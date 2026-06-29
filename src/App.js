@@ -67,9 +67,9 @@ const PRODUCTS = [
   { id: 3, name: "Bazaar Bhav",          hindi: "बाज़ार भाव",             category: "Market",     price: "₹199", priceNote: "/ report", live: false, sub: false, desc: "Tumhari salary market mein kahin hai? Percentile rank, skill gap, aur job switch suggestions." },
   { id: 4, name: "Hike Mantra",          hindi: "वेतन वृद्धि मंत्र",     category: "Negotiation",price: "₹199", priceNote: "/ report", live: false, sub: false, desc: "Appraisal mein kya bolein? Complete negotiation script — opening se closing tak, sab ready." },
   { id: 5, name: "Khata Puraan",         hindi: "खाता पुराण",             category: "Finance",    price: "₹199", priceNote: "/ month",  live: false, sub: true,  desc: "Tumhara personal AI financial advisor. Investment suggestions, monthly plan, SIP targets — har mahine." },
-  { id: 6, name: "IT Notice Nivaran",    hindi: "आयकर नोटिस निवारण",    category: "Tax-Legal",  price: "₹599", priceNote: "/ report", live: false, sub: false, desc: "Income Tax ka notice aaya? Ghabrao mat. Notice identify, reply letter, aur filing instructions." },
+  { id: 6, name: "IT Notice Nivaran",    hindi: "आयकर नोटिस निवारण",    category: "Tax-Legal",  price: "₹399", priceNote: "/ report", live: false, sub: false, desc: "Income Tax ka notice aaya? Ghabrao mat. Notice identify, reply letter, aur filing instructions." },
   { id: 7, name: "PF Nyaya",             hindi: "पीएफ न्याय",             category: "EPFO",       price: "₹399", priceNote: "/ report", live: false, sub: false, desc: "PF mein gadbad hai? Screenshot upload karo, exact complaint letter aur step-by-step resolution pao." },
-  { id: 8, name: "Adhikar Patra",        hindi: "अधिकार पत्र",            category: "Legal",      price: "₹499", priceNote: "/ report", live: false, sub: false, desc: "Salary roki? Galat nikalaya? Harassment? Labour Act ke hisaab se formal legal notice. Apna haq lo." },
+  { id: 8, name: "Adhikar Patra",        hindi: "अधिकार पत्र",            category: "Legal",      price: "₹399", priceNote: "/ report", live: false, sub: false, desc: "Salary roki? Galat nikalaya? Harassment? Labour Act ke hisaab se formal legal notice. Apna haq lo." },
 ];
 
 const BUNDLE_PRODUCTS = PRODUCTS.filter(p => !p.sub);
