@@ -433,23 +433,23 @@ export default function App() {
                 <h3 className="verdict-title">📿 Aapka TankhaPuraan Verdict</h3>
                 <div className="regime-compare">
                   <div className={`regime-card ${result.winner === "old" ? "winner" : ""}`}>
-                    {result.winner === "old" && <span className="winner-badge">✓ Bachtu</span>}
+                    {result.winner === "old" && <span className="winner-badge">✓ Bachat</span>}
                     <div className="regime-name">Puraana Regime</div>
                     <div className="regime-tax">{inr(result.oldTax)}</div>
-                    <div className="regime-label">Dey Tax</div>
+                    <div className="regime-label">Tax Dena Hai</div>
                   </div>
                   <div className={`regime-card ${result.winner === "new" ? "winner" : ""}`}>
-                    {result.winner === "new" && <span className="winner-badge">✓ Bachtu</span>}
+                    {result.winner === "new" && <span className="winner-badge">✓ Bachat</span>}
                     <div className="regime-name">Naya Regime</div>
                     <div className="regime-tax">{inr(result.newTax)}</div>
-                    <div className="regime-label">Dey Tax</div>
+                    <div className="regime-label">Tax Dena Hai</div>
                   </div>
                 </div>
 
                 {result.saving > 0 && (
                   <div className="savings-banner">
                     <span className="savings-amount">{inr(result.saving)}</span>
-                    <div className="savings-label">Aapki Bachat | {inr(result.saving / 12)} maas priti bachat</div>
+                    <div className="savings-label">Aapki Bachat | {inr(result.saving / 12)} prati maas bachat</div>
                   </div>
                 )}
 
@@ -466,7 +466,7 @@ export default function App() {
                     <li>Next year tax planning recommendations</li>
                   </ul>
                   <button className="pdf-btn" onClick={handlePDFClick}>
-                    📥 PDF Report Lein — ₹199
+                    📥 PDF Report Lein — ₹199 only
                   </button>
                   <p className="pdf-trust">🔒 Secure payment via Razorpay &nbsp;•&nbsp; Email in 10 mins &nbsp;•&nbsp; Auto-refund if failed</p>
                 </div>
@@ -565,7 +565,7 @@ export default function App() {
                 <label>Email Address</label>
                 <input type="email" placeholder="e.g. amiya@example.com" value={userEmail} onChange={e => setUserEmail(e.target.value)} />
               </div>
-              {loading && <div className="modal-loading">⏳ Order tayaar ho raha hai...</div>}
+              {loading && <div className="modal-loading">⏳ Patrika tayaar ho raha hai...</div>}
               <button
                 className="modal-btn"
                 onClick={handleModalSubmit}
