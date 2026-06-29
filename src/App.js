@@ -208,7 +208,7 @@ const styles = `
   .step:not(:last-child)::after { content: '—'; position: absolute; right: -6px; top: 32px; color: ${C.gold}; opacity: 0.4; font-size: 18px; }
   .step-num { width: 44px; height: 44px; background: ${C.sindoorDark}; border: 1.5px solid ${C.gold}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 18px; color: ${C.gold}; margin: 0 auto 14px; }
   .step-title { font-family: 'Playfair Display', serif; font-size: 17px; color: ${C.ink}; margin-bottom: 6px; }
-  .step-desc { font-size: 13px; color: ${C.muted}; font-style: italic; }
+  .step-desc { font-size: 13px; color: ${C.ink}; font-style: italic; }
 
   .footer { background: ${C.ink}; padding: 40px 24px 24px; text-align: center; border-top: 2px solid ${C.sindoor}; }
   .footer-brand { font-family: 'Playfair Display', serif; font-size: 22px; color: ${C.paper}; margin-bottom: 4px; }
