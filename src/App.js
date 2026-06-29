@@ -74,6 +74,7 @@ const PRODUCTS = [
 
 const BUNDLE_PRODUCTS = PRODUCTS.filter(p => !p.sub);
 const BUNDLE_ORIGINAL = BUNDLE_PRODUCTS.reduce((sum, p) => sum + parseInt(p.price.replace('₹','')), 0);
+const BUNDLE_PRICE = 1801;
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
 const styles = `
