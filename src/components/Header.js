@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Header = ({ currentView, goHome }) => {
-  const [scrolled, setScrolled] = React.useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -13,7 +13,7 @@ const Header = ({ currentView, goHome }) => {
     <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
       <div className="header-inner">
         <div className="header-brand">
-          <div className="header-logo">TP</div>
+          <div className="header-logo" style={{flexShrink: 0}}>TP</div>
           <div className="header-title">
             <div className="header-name">Tankha <span>Puraan</span></div>
             <div className="brand-pronunciation">
