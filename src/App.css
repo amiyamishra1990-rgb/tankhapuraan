@@ -70,8 +70,8 @@ img { max-width: 100%; }
 .header-name { font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; color: var(--gold-light); letter-spacing: 0.02em; }
 .header-name span { color: var(--gold-soft); }
 .brand-pronunciation { display: flex; align-items: baseline; gap: 6px; line-height: 1; margin-top: 1px; }
-.brand-devanagari { font-family: var(--font-devanagari); font-size: 14px; color: var(--gold-soft); font-weight: 400; letter-spacing: 0.5px; }
-.brand-phonetic { font-family: var(--font-body); font-size: 15px; color: rgba(232,201,122,0.5); font-style: italic; }
+.brand-devanagari { font-family: var(--font-devanagari); font-size: 14px; color: var(--gold-soft); font-weight: 600; letter-spacing: 0.5px; }
+.brand-phonetic { font-family: var(--font-body); font-size: 12px; color: rgba(232,201,122,0.6); font-style: italic; }
 .header-subtitle { font-family: var(--font-cinzel); font-size: 0.6rem; color: var(--gold); letter-spacing: 0.25em; text-transform: uppercase; }
 .header-right { display: flex; align-items: center; gap: 16px; }
 .back-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 8px 18px; border-radius: 4px; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 500; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
