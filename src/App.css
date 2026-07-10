@@ -65,7 +65,7 @@ img { max-width: 100%; }
 .site-header.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
 .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .header-brand { display: flex; align-items: center; gap: 14px; }
-.header-logo { width: 52px; height: 52px; background: var(--sindoor-dark); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-cinzel); color: var(--gold); font-weight: 700; font-size: 1.1rem; }
+.header-logo { width: 50px; height: 50px; background: var(--sindoor-dark); border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-cinzel); color: var(--gold); font-weight: 700; font-size: 1.2rem; flex-shrink: 0; }
 .header-title { display: flex; flex-direction: column; line-height: 1.2; }
 .header-name { font-family: var(--font-display); font-weight: 900; font-size: 1.6rem; color: var(--gold-light); letter-spacing: 0.02em; }
 .header-name span { color: var(--gold-soft); }
