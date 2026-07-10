@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import TrustBar from './components/TrustBar';
@@ -19,6 +19,25 @@ function App() {
   const [payId, setPayId] = useState('');
   const [toastMsg, setToastMsg] = useState('');
   const [toastType, setToastType] = useState('info');
+
+  // INTERSECTION OBSERVER - makes .reveal elements visible on scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const observe = () => {
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    };
+
+    observe();
+    const interval = setInterval(observe, 1000);
+    return () => { clearInterval(interval); observer.disconnect(); };
+  }, [currentView]);
 
   const goHome = () => {
     setCurrentView('home');
@@ -102,7 +121,10 @@ function App() {
         simulatePayment={simulatePayment}
         goHome={goHome}
         showToast={showToast}
-        scrollToCalc={() => document.getElementById('calcSection')?.scrollIntoView({ behavior: 'smooth' })}
+        scrollToCalc={() => {
+          const el = document.getElementById('calcSection');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
       />
     </div>
   );
