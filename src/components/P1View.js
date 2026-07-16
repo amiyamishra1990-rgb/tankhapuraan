@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { parseNum, formatCurrency, formatNum, validateEmail } from '../utils/taxCalculator';
 
-const BACKEND_URL = 'https://tankhapuraan-backend-production.up.railway.app';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-production.up.railway.app';
+const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
 
 const P1View = ({ goHome, calcResult, simulatePayment, showToast }) => {
   const [step, setStep] = useState(1);
@@ -68,7 +69,7 @@ const P1View = ({ goHome, calcResult, simulatePayment, showToast }) => {
       
       // Step 2: Open Razorpay Checkout
       const options = {
-        key: 'rzp_live_T0o9KcbQlYwweH', // Your LIVE key
+        key: RAZORPAY_KEY_ID,
         amount: orderData.amount,
         currency: 'INR',
         name: 'Tankha Puraan',
