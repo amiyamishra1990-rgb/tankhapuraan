@@ -38,11 +38,28 @@ const P1View = ({ goHome, calcResult, showToast }) => {
   const prevStep = () => { setStep(step - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   // ===== RAZORPAY INTEGRATION =====
-  
+
+  // Ensure checkout.js is loaded (fallback if the index.html script was blocked or slow)
+  const loadRazorpay = () => new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+
   const handlePayment = async () => {
     setLoading(true);
-    
+
     try {
+      const razorpayReady = await loadRazorpay();
+      if (!razorpayReady) {
+        showToast('Razorpay load nahi hua. Ad-blocker band karke try karo.', 'error');
+        setLoading(false);
+        return;
+      }
+
       // Step 1: Create Razorpay Order
       const orderRes = await fetch(`${BACKEND_URL}/api/p1/create-order`, {
         method: 'POST',
