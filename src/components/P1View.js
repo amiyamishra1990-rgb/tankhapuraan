@@ -4,7 +4,7 @@ import { parseNum, formatCurrency, formatNum, validateEmail } from '../utils/tax
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-production.up.railway.app';
 const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
 
-const P1View = ({ goHome, calcResult, simulatePayment, showToast }) => {
+const P1View = ({ goHome, calcResult, showToast }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     ctc: calcResult?.ctc ? formatNum(calcResult.ctc) : '',

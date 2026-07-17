@@ -62,16 +62,6 @@ function App() {
     setTimeout(() => { setToastMsg(''); }, 3500);
   };
 
-  const simulatePayment = () => {
-    setActiveModal('processing');
-    setTimeout(() => {
-      const id = Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 6).toUpperCase();
-      setPayId(id);
-      setActiveModal('success');
-      showToast('Payment successful! Patrika generate ho rahi hai.', 'success');
-    }, 2200);
-  };
-
   return (
     <div className="App">
       {toastMsg && (
@@ -103,11 +93,11 @@ function App() {
         )}
         
         {currentView === 'p1' && (
-          <P1View goHome={goHome} calcResult={calcResult} simulatePayment={simulatePayment} showToast={showToast} />
+          <P1View goHome={goHome} calcResult={calcResult} showToast={showToast} />
         )}
         
         {currentView === 'p2' && (
-          <P2View goHome={goHome} simulatePayment={simulatePayment} showToast={showToast} />
+          <P2View goHome={goHome} showToast={showToast} />
         )}
       </main>
 
@@ -118,7 +108,7 @@ function App() {
         setActiveModal={setActiveModal}
         comingSoonProduct={comingSoonProduct}
         payId={payId}
-        simulatePayment={simulatePayment}
+        openProduct={openProduct}
         goHome={goHome}
         showToast={showToast}
         scrollToCalc={() => {

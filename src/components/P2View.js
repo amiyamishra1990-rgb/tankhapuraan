@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
 
-const P2View = ({ goHome, simulatePayment, showToast }) => {
+const P2View = ({ goHome, showToast }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: '', email: '', month: '7', empType: 'permanent', state: 'MH', language: 'hi', basic: '', hra: '', da: '', conveyance: '', medical: '', special: '', otherEarn: '', pf: '', esi: '', pt: '', tds: '', otherDed: '' });
   const [errors, setErrors] = useState({});
@@ -110,7 +110,7 @@ const P2View = ({ goHome, simulatePayment, showToast }) => {
               <p style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'2.2rem',color:'var(--sindoor-dark)'}}>₹99</p>
             </div>
             <div style={{textAlign:'center'}}>
-              <button className="btn-gold" onClick={simulatePayment}><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹99 & Get Slip Pariksha</button>
+              <button className="btn-gold" onClick={() => showToast('Slip Pariksha jald hi live hoga! Tab tak P1 Patrika try karo.', 'info')}><i className="fas fa-hourglass-half" style={{marginRight:'6px'}}></i> Coming Soon</button>
               <p style={{fontFamily:'var(--font-ui)',fontSize:'0.7rem',color:'var(--muted)',marginTop:'10px'}}>Auto-refund if report is not delivered in 10 minutes</p>
             </div>
             <div className="wizard-nav"><button className="btn-prev" onClick={prevStep}><i className="fas fa-arrow-left" style={{marginRight:'6px'}}></i> Back</button><div></div></div>
