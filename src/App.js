@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
+import NewsTicker from './components/NewsTicker';
 import Hero from './components/Hero';
 import TrustBar from './components/TrustBar';
 import FreeCalculator from './components/FreeCalculator';
@@ -74,6 +75,7 @@ function App() {
       )}
 
       <Header currentView={currentView} goHome={goHome} />
+      <NewsTicker />
 
       <main>
         {currentView === 'home' && (
