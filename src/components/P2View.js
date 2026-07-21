@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-432180395696.asia-south1.run.app';
+const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
+
 const P2View = ({ goHome, showToast }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ name: '', email: '', month: '7', empType: 'permanent', state: 'MH', language: 'hi', basic: '', hra: '', da: '', conveyance: '', medical: '', special: '', otherEarn: '', pf: '', esi: '', pt: '', tds: '', otherDed: '' });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (field, value) => { setFormData(prev => ({ ...prev, [field]: value })); setErrors(prev => ({ ...prev, [field]: '' })); };
 
@@ -12,6 +16,112 @@ const P2View = ({ goHome, showToast }) => {
     const earnings = ['basic','hra','da','conveyance','medical','special','otherEarn'].reduce((sum, f) => sum + parseNum(formData[f]), 0);
     const deductions = ['pf','esi','pt','tds','otherDed'].reduce((sum, f) => sum + parseNum(formData[f]), 0);
     return earnings - deductions;
+  };
+
+  // ===== RAZORPAY INTEGRATION (same pattern as P1View) =====
+
+  const loadRazorpay = () => new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+
+  const buildSlipPayload = () => ({
+    basic: parseNum(formData.basic), hra: parseNum(formData.hra), da: parseNum(formData.da),
+    conveyance: parseNum(formData.conveyance), medical: parseNum(formData.medical),
+    special: parseNum(formData.special), otherEarn: parseNum(formData.otherEarn),
+    pf: parseNum(formData.pf), esi: parseNum(formData.esi), pt: parseNum(formData.pt),
+    tds: parseNum(formData.tds), otherDed: parseNum(formData.otherDed),
+    state: formData.state, empType: formData.empType, month: formData.month
+  });
+
+  const handlePayment = async () => {
+    setLoading(true);
+
+    try {
+      const razorpayReady = await loadRazorpay();
+      if (!razorpayReady) {
+        showToast('Razorpay load nahi hua. Ad-blocker band karke try karo.', 'error');
+        setLoading(false);
+        return;
+      }
+
+      // Step 1: Create Razorpay Order
+      const orderRes = await fetch(`${BACKEND_URL}/api/p2/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: formData.name, email: formData.email, language: formData.language })
+      });
+      const orderData = await orderRes.json();
+
+      if (!orderData.orderId) {
+        showToast('Order create nahi hua. Try again.', 'error');
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Open Razorpay Checkout
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: orderData.amount,
+        currency: 'INR',
+        name: 'Tankha Puraan',
+        description: 'Slip Pariksha Report',
+        order_id: orderData.orderId,
+        handler: async function (response) {
+          // Step 3: Verify Payment
+          const verifyRes = await fetch(`${BACKEND_URL}/api/p2/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          });
+          const verifyData = await verifyRes.json();
+
+          if (verifyData.verified) {
+            // Step 4: Generate Report
+            const reportRes = await fetch(`${BACKEND_URL}/api/p2/generate-report`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: formData.name,
+                email: formData.email,
+                language: formData.language,
+                paymentId: response.razorpay_payment_id,
+                slip: buildSlipPayload()
+              })
+            });
+            const reportData = await reportRes.json();
+
+            if (reportData.success) {
+              showToast('Slip Pariksha generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+              goHome();
+            } else {
+              showToast('Report generation failed. Please contact support.', 'error');
+            }
+          } else {
+            showToast('Payment verification failed. Please contact support.', 'error');
+          }
+        },
+        prefill: { name: formData.name, email: formData.email },
+        theme: { color: '#7C1316' }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+
+    } catch (err) {
+      console.error('Payment error:', err);
+      showToast('Payment initiation failed. Please try again.', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const validateStep = (s) => {
@@ -27,7 +137,14 @@ const P2View = ({ goHome, showToast }) => {
   const netPay = calcNetPay();
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const states = [{v:'MH',l:'Maharashtra'},{v:'KA',l:'Karnataka'},{v:'TN',l:'Tamil Nadu'},{v:'DL',l:'Delhi'},{v:'GJ',l:'Gujarat'},{v:'TG',l:'Telangana'},{v:'WB',l:'West Bengal'},{v:'RJ',l:'Rajasthan'},{v:'UP',l:'Uttar Pradesh'},{v:'MP',l:'Madhya Pradesh'},{v:'HR',l:'Haryana'},{v:'Other',l:'Other'}];
-  const langOptions = [{v:'hi',l:'हिन्दी (Hindi)'},{v:'en',l:'English'},{v:'bn',l:'বাংলা (Bengali)'},{v:'te',l:'తెలుగు (Telugu)'},{v:'mr',l:'मराठी (Marathi)'},{v:'ta',l:'தமிழ் (Tamil)'},{v:'gu',l:'ગુજરાતી (Gujarati)'},{v:'kn',l:'ಕನ್ನಡ (Kannada)'},{v:'ml',l:'മലയാളം (Malayalam)'},{v:'pa',l:'ਪੰਜਾਬੀ (Punjabi)'}];
+  const langOptions = [
+    {v:'hi',l:'हिन्दी (Hindi)'},{v:'en',l:'English'},{v:'bn',l:'বাংলা (Bengali)'},{v:'te',l:'తెలుగు (Telugu)'},
+    {v:'mr',l:'मराठी (Marathi)'},{v:'ta',l:'தமிழ் (Tamil)'},{v:'gu',l:'ગુજરાતી (Gujarati)'},{v:'kn',l:'ಕನ್ನಡ (Kannada)'},
+    {v:'ml',l:'മലയാളം (Malayalam)'},{v:'pa',l:'ਪੰਜਾਬੀ (Punjabi)'},{v:'or',l:'ଓଡ଼ିଆ (Odia)'},{v:'ur',l:'اردو (Urdu)'},
+    {v:'as',l:'অসমীয়া (Assamese)'},{v:'mai',l:'मैथिली (Maithili)'},{v:'ne',l:'नेपाली (Nepali)'},{v:'gom',l:'कोंकणी (Konkani)'},
+    {v:'doi',l:'डोगरी (Dogri)'},{v:'sa',l:'संस्कृत (Sanskrit)'},{v:'mni',l:'ꯃꯤꯇꯩꯂꯣꯟ (Manipuri)'},{v:'brx',l:'बड़ो (Bodo)'},
+    {v:'sat',l:'ᱥᱟᱱᱛᱟᱲᱤ (Santali)'},{v:'ks',l:'کٲشُر (Kashmiri)'},{v:'sd',l:'سنڌي (Sindhi)'}
+  ];
 
   const totalEarnings = ['basic','hra','da','conveyance','medical','special','otherEarn'].reduce((s,f) => s + parseNum(formData[f]), 0);
   const totalDeductions = ['pf','esi','pt','tds','otherDed'].reduce((s,f) => s + parseNum(formData[f]), 0);
@@ -110,7 +227,9 @@ const P2View = ({ goHome, showToast }) => {
               <p style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'2.2rem',color:'var(--sindoor-dark)'}}>₹99</p>
             </div>
             <div style={{textAlign:'center'}}>
-              <button className="btn-gold" onClick={() => showToast('Slip Pariksha jald hi live hoga! Tab tak P1 Patrika try karo.', 'info')}><i className="fas fa-hourglass-half" style={{marginRight:'6px'}}></i> Coming Soon</button>
+              <button className="btn-gold" onClick={handlePayment} disabled={loading}>
+                {loading ? (<><i className="fas fa-spinner fa-spin" style={{marginRight:'6px'}}></i> Processing...</>) : (<><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹99 via Razorpay</>)}
+              </button>
               <p style={{fontFamily:'var(--font-ui)',fontSize:'0.7rem',color:'var(--muted)',marginTop:'10px'}}>Auto-refund if report is not delivered in 10 minutes</p>
             </div>
             <div className="wizard-nav"><button className="btn-prev" onClick={prevStep}><i className="fas fa-arrow-left" style={{marginRight:'6px'}}></i> Back</button><div></div></div>
