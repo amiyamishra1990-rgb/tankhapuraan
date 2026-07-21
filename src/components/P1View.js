@@ -173,7 +173,17 @@ const P1View = ({ goHome, calcResult, showToast }) => {
     { value: 'pa', label: 'ਪੰਜਾਬੀ (Punjabi)' },
     { value: 'or', label: 'ଓଡ଼ିଆ (Odia)' },
     { value: 'ur', label: 'اردو (Urdu)' },
-    { value: 'as', label: 'অসমীয়া (Assamese)' }
+    { value: 'as', label: 'অসমীয়া (Assamese)' },
+    { value: 'mai', label: 'मैथिली (Maithili)' },
+    { value: 'ne', label: 'नेपाली (Nepali)' },
+    { value: 'gom', label: 'कोंकणी (Konkani)' },
+    { value: 'doi', label: 'डोगरी (Dogri)' },
+    { value: 'sa', label: 'संस्कृत (Sanskrit)' },
+    { value: 'mni', label: 'ꯃꯤꯇꯩꯂꯣꯟ (Manipuri)' },
+    { value: 'brx', label: 'बड़ो (Bodo)' },
+    { value: 'sat', label: 'ᱥᱟᱱᱛᱟᱲᱤ (Santali)' },
+    { value: 'ks', label: 'کٲشُر (Kashmiri)' },
+    { value: 'sd', label: 'سنڌي (Sindhi)' }
   ];
 
   return (
