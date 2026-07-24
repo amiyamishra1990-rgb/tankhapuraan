@@ -12,6 +12,7 @@ import P1View from './components/P1View';
 import P2View from './components/P2View';
 import P3View from './components/P3View';
 import AboutView from './components/AboutView';
+import LegalView from './components/LegalView';
 import Modals from './components/Modals';
 
 function App() {
@@ -111,9 +112,16 @@ function App() {
         {currentView === 'about' && (
           <AboutView goHome={goHome} />
         )}
+
+        {['privacy','terms','refund','disclaimer'].includes(currentView) && (
+          <LegalView page={currentView} goHome={goHome} />
+        )}
       </main>
 
-      <Footer onNavigateAbout={() => { setCurrentView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
+      <Footer
+        onNavigateAbout={() => { setCurrentView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+        onNavigateLegal={(page) => { setCurrentView(page); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+      />
       
       <Modals 
         activeModal={activeModal}

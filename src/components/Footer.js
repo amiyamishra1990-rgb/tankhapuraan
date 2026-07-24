@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = ({ onNavigateAbout }) => (
+const Footer = ({ onNavigateAbout, onNavigateLegal }) => (
   <footer className="site-footer">
     <div className="footer-inner">
       <div className="footer-top">
@@ -23,11 +23,14 @@ const Footer = ({ onNavigateAbout }) => (
           </div>
           <div className="footer-link-group">
             <h4>Legal</h4>
-            <a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Refund Policy</a><a href="#">Disclaimer</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('privacy'); }}>Privacy Policy</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('terms'); }}>Terms of Service</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('refund'); }}>Refund Policy</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('disclaimer'); }}>Disclaimer</a>
           </div>
           <div className="footer-link-group">
             <h4>Company</h4>
-            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateAbout && onNavigateAbout(); }}>About ASPOVO</a><a href="#">Contact</a><a href="#">Careers</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateAbout && onNavigateAbout(); }}>About ASPOVO</a><a href="#">Contact</a>
           </div>
         </div>
       </div>
