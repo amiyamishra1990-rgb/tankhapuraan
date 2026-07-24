@@ -136,7 +136,17 @@ const P2View = ({ goHome, showToast }) => {
 
   const netPay = calcNetPay();
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const states = [{v:'MH',l:'Maharashtra'},{v:'KA',l:'Karnataka'},{v:'TN',l:'Tamil Nadu'},{v:'DL',l:'Delhi'},{v:'GJ',l:'Gujarat'},{v:'TG',l:'Telangana'},{v:'WB',l:'West Bengal'},{v:'RJ',l:'Rajasthan'},{v:'UP',l:'Uttar Pradesh'},{v:'MP',l:'Madhya Pradesh'},{v:'HR',l:'Haryana'},{v:'Other',l:'Other'}];
+  const states = [
+    {v:'AP',l:'Andhra Pradesh'},{v:'AR',l:'Arunachal Pradesh'},{v:'AS',l:'Assam'},{v:'BR',l:'Bihar'},
+    {v:'CG',l:'Chhattisgarh'},{v:'DL',l:'Delhi'},{v:'GA',l:'Goa'},{v:'GJ',l:'Gujarat'},{v:'HR',l:'Haryana'},
+    {v:'HP',l:'Himachal Pradesh'},{v:'JH',l:'Jharkhand'},{v:'KA',l:'Karnataka'},{v:'KL',l:'Kerala'},
+    {v:'MP',l:'Madhya Pradesh'},{v:'MH',l:'Maharashtra'},{v:'MN',l:'Manipur'},{v:'ML',l:'Meghalaya'},
+    {v:'MZ',l:'Mizoram'},{v:'NL',l:'Nagaland'},{v:'OR',l:'Odisha'},{v:'PB',l:'Punjab'},{v:'RJ',l:'Rajasthan'},
+    {v:'SK',l:'Sikkim'},{v:'TN',l:'Tamil Nadu'},{v:'TG',l:'Telangana'},{v:'TR',l:'Tripura'},
+    {v:'UP',l:'Uttar Pradesh'},{v:'UK',l:'Uttarakhand'},{v:'WB',l:'West Bengal'},
+    {v:'AN',l:'Andaman & Nicobar'},{v:'CH',l:'Chandigarh'},{v:'JK',l:'Jammu & Kashmir'},{v:'LA',l:'Ladakh'},
+    {v:'PY',l:'Puducherry'},{v:'Other',l:'Other'}
+  ];
   const langOptions = [
     {v:'hi',l:'हिन्दी (Hindi)'},{v:'en',l:'English'},{v:'bn',l:'বাংলা (Bengali)'},{v:'te',l:'తెలుగు (Telugu)'},
     {v:'mr',l:'मराठी (Marathi)'},{v:'ta',l:'தமிழ் (Tamil)'},{v:'gu',l:'ગુજરાતી (Gujarati)'},{v:'kn',l:'ಕನ್ನಡ (Kannada)'},
