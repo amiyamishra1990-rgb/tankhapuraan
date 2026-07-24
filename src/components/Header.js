@@ -13,7 +13,7 @@ const Header = ({ currentView, goHome }) => {
     <header className={`site-header${scrolled ? ' scrolled' : ''}`}>
       <div className="header-inner">
         <div className="header-brand">
-          <div className="header-logo" style={{flexShrink: 0}}>TP</div>
+          <img src="/logo192.png" alt="Tankha Puraan" className="header-logo" style={{flexShrink: 0}} />
           <div className="header-title">
             <div className="header-name">Tankha <span>Puraan</span></div>
             <div className="brand-pronunciation">
