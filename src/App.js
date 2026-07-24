@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import P1View from './components/P1View';
 import P2View from './components/P2View';
 import P3View from './components/P3View';
+import AboutView from './components/AboutView';
 import Modals from './components/Modals';
 
 function App() {
@@ -47,7 +48,7 @@ function App() {
   };
 
   const openProduct = (id) => {
-    if (id === 'p1' || id === 'p2') {
+    if (id === 'p1' || id === 'p2' || id === 'p3') {
       setCurrentView(id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -106,9 +107,13 @@ function App() {
         {currentView === 'p3' && (
           <P3View goHome={goHome} showToast={showToast} />
         )}
+
+        {currentView === 'about' && (
+          <AboutView goHome={goHome} />
+        )}
       </main>
 
-      <Footer />
+      <Footer onNavigateAbout={() => { setCurrentView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
       
       <Modals 
         activeModal={activeModal}

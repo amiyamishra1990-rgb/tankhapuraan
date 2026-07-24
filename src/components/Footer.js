@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = () => (
+const Footer = ({ onNavigateAbout }) => (
   <footer className="site-footer">
     <div className="footer-inner">
       <div className="footer-top">
@@ -19,8 +19,7 @@ const Footer = () => (
             <h4>Products</h4>
             <a href="#calcSection">Tankha Puraan Patrika</a>
             <a href="#productsSection">Slip Pariksha</a>
-            <a href="#productsSection">Bazaar Bhav</a>
-            <a href="#productsSection">Hike Mantra</a>
+            <a href="#productsSection">Naya Wage Code Jaanch</a>
           </div>
           <div className="footer-link-group">
             <h4>Legal</h4>
@@ -28,12 +27,13 @@ const Footer = () => (
           </div>
           <div className="footer-link-group">
             <h4>Company</h4>
-            <a href="#">About ASPOVO</a><a href="#">Contact</a><a href="#">Careers</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateAbout && onNavigateAbout(); }}>About ASPOVO</a><a href="#">Contact</a><a href="#">Careers</a>
           </div>
         </div>
       </div>
       <div className="footer-bottom">
         <p className="footer-disclaimer">Calculations are informational only. For final decisions consult a CA or qualified advisor. Tankha Puraan is not liable for any financial or legal loss. All reports generated using publicly available Indian tax laws, Labour Codes, and EPFO regulations.</p>
+        <p className="footer-aspovo-statement">ASPOVO is an AI-first product company dedicated to solving meaningful real-world problems through thoughtfully designed digital products. We build technology that simplifies life, empowers people, and creates lasting value. Every ASPOVO product is guided by long-term thinking, human-centered design, trust, quality, and responsible use of AI.</p>
         <p className="footer-copy">&copy; 2026 A Product of ASPOVO. All rights reserved. | tankhapuraan.com</p>
       </div>
     </div>

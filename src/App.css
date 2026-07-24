@@ -256,6 +256,7 @@ img { max-width: 100%; }
 .footer-link-group a:hover { color: var(--gold-soft); }
 .footer-bottom { border-top: 1px solid rgba(201,168,76,0.2); padding-top: 24px; text-align: center; }
 .footer-disclaimer { font-family: var(--font-body); font-style: italic; color: var(--muted); font-size: 0.78rem; line-height: 1.6; max-width: 700px; margin: 0 auto 16px; }
+.footer-aspovo-statement { font-family: var(--font-body); color: var(--muted); font-size: 0.76rem; line-height: 1.65; max-width: 640px; margin: 0 auto 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .footer-copy { font-family: var(--font-ui); font-size: 0.72rem; color: rgba(122,106,90,0.6); letter-spacing: 0.05em; }
 
 /* PRODUCT VIEW */
