@@ -10,6 +10,7 @@ import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import P1View from './components/P1View';
 import P2View from './components/P2View';
+import P3View from './components/P3View';
 import Modals from './components/Modals';
 
 function App() {
@@ -100,6 +101,10 @@ function App() {
         
         {currentView === 'p2' && (
           <P2View goHome={goHome} showToast={showToast} />
+        )}
+
+        {currentView === 'p3' && (
+          <P3View goHome={goHome} showToast={showToast} />
         )}
       </main>
 
