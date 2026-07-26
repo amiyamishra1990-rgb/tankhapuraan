@@ -163,7 +163,7 @@ const P4View = ({ goHome, showToast }) => {
           <p className="product-view-adhyaya">◆ Adhyaya IV — Samvaad ◆</p>
           <h2 className="product-view-title">Hike Mantra</h2>
           <p className="product-view-tagline">Appraisal se pehle ka hathiyar: tumhari raise ask ka asli take-home reality, transparent anchor math, aur ready-to-say negotiation script.</p>
-          <span className="product-view-price-tag">₹151 / report</span>
+          <span className="product-view-price-tag">₹99 / report</span>
         </div>
         <div className="wizard-steps">
           {[1,2,3].map(i => (
@@ -226,7 +226,7 @@ const P4View = ({ goHome, showToast }) => {
             </div>
             <div style={{textAlign:'center'}}>
               <button className="btn-gold" onClick={handlePayment} disabled={loading}>
-                {loading ? (<><i className="fas fa-spinner fa-spin" style={{marginRight:'6px'}}></i> Processing...</>) : (<><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹151 via Razorpay</>)}
+                {loading ? (<><i className="fas fa-spinner fa-spin" style={{marginRight:'6px'}}></i> Processing...</>) : (<><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹99 via Razorpay</>)}
               </button>
               <p style={{fontFamily:'var(--font-ui)',fontSize:'0.7rem',color:'var(--muted)',marginTop:'10px'}}>Auto-refund if report is not delivered in 10 minutes</p>
             </div>

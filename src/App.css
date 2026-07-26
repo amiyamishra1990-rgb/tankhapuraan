@@ -192,7 +192,7 @@ img { max-width: 100%; }
 .products-section { padding: 80px 0; background: var(--parchment); }
 .products-header { text-align: center; margin-bottom: 48px; }
 .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
-.product-card { background: var(--cream); border: 2px solid var(--border); border-radius: 10px; padding: 28px 24px; position: relative; transition: all 0.4s cubic-bezier(0.22,1,0.36,1); cursor: default; overflow: hidden; }
+.product-card { background: var(--cream); border: 2px solid var(--border); border-radius: 10px; padding: 28px 24px; position: relative; transition: all 0.4s cubic-bezier(0.22,1,0.36,1); cursor: default; overflow: hidden; display: flex; flex-direction: column; }
 .product-card.live { cursor: pointer; }
 .product-card.live:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(26,10,11,0.1); border-color: var(--gold); }
 .product-card.building { cursor: pointer; }
@@ -201,11 +201,13 @@ img { max-width: 100%; }
 .product-card.coming-soon:hover { opacity: 0.85; transform: translateY(-3px); }
 .product-adhyaya { font-family: var(--font-cinzel); font-size: 0.65rem; color: var(--gold); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 12px; }
 .product-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 16px; background: var(--parchment-deep); border: 1.5px solid var(--border); color: var(--sindoor-dark); }
+.product-best-for { display: inline-block; font-family: var(--font-ui); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 11px; border-radius: 12px; background: var(--parchment-deep); color: var(--sindoor-dark); border: 1px solid var(--gold-soft); margin-bottom: 12px; }
 .product-name { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--ink); margin-bottom: 2px; }
 .product-hindi { font-family: var(--font-devanagari); font-style: normal; color: var(--muted); font-size: 0.9rem; margin-bottom: 10px; }
-.product-tagline { font-family: var(--font-body); color: var(--ink-light); font-size: 0.92rem; margin-bottom: 16px; line-height: 1.5; }
-.product-price { font-family: var(--font-ui); font-weight: 700; font-size: 1.1rem; color: var(--sindoor-dark); margin-bottom: 12px; }
-.product-price .period { font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+.product-tagline { font-family: var(--font-body); color: var(--ink); font-size: 1rem; font-weight: 500; margin-bottom: 18px; line-height: 1.5; }
+.product-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
+.product-price { font-family: var(--font-ui); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.04em; color: var(--muted); background: var(--parchment); padding: 4px 11px; border-radius: 12px; border: 1px solid var(--border); }
+.product-price .period { font-weight: 400; font-size: 0.68rem; color: var(--muted); }
 .product-status { display: inline-block; font-family: var(--font-ui); font-size: 0.65rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.1em; text-transform: uppercase; }
 .status-live { background: var(--green); color: #fff; }
 .status-building { background: var(--gold); color: var(--ink); }
