@@ -34,19 +34,22 @@ const Header = ({ currentView, goHome, openDashboard }) => {
               <i className="fas fa-file-invoice"></i> My Reports
             </button>
           )}
-          <select className="lang-select" aria-label="Select Language">
-            <option value="en">English</option>
-            <option value="hi" selected>हिन्दी</option>
-            <option value="bn">বাংলা</option>
-            <option value="te">తెలుగు</option>
-            <option value="mr">मराठी</option>
-            <option value="ta">தமிழ்</option>
-            <option value="gu">ગુજરાતી</option>
-            <option value="kn">ಕನ್ನಡ</option>
-            <option value="ml">മലയാളം</option>
-            <option value="pa">ਪੰਜਾਬੀ</option>
-            <option value="ur">اردو</option>
-          </select>
+          <div className="lang-select-wrap">
+            <div className="lang-select-visual" aria-hidden="true"><i className="fas fa-globe"></i></div>
+            <select className="lang-select" aria-label="Select Language">
+              <option value="en">English</option>
+              <option value="hi" selected>हिन्दी</option>
+              <option value="bn">বাংলা</option>
+              <option value="te">తెలుగు</option>
+              <option value="mr">मराठी</option>
+              <option value="ta">தமிழ்</option>
+              <option value="gu">ગુજરાતી</option>
+              <option value="kn">ಕನ್ನಡ</option>
+              <option value="ml">മലയാളം</option>
+              <option value="pa">ਪੰਜਾਬੀ</option>
+              <option value="ur">اردو</option>
+            </select>
+          </div>
         </div>
       </div>
     </header>
