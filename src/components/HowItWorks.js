@@ -21,7 +21,7 @@ const HowItWorks = () => (
         <div className="how-step reveal">
           <div className="how-number">3</div>
           <h3 className="how-title">Pao Report</h3>
-          <p className="how-desc">10 minute mein Patrika-style PDF email pe aati hai. Apni bhasha mein. Complete analysis ready.</p>
+          <p className="how-desc">10 minute mein tumhara report email pe aata hai — apni bhasha mein, complete analysis ke saath.</p>
         </div>
       </div>
     </div>

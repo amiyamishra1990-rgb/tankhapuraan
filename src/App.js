@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import TrustBar from './components/TrustBar';
 import FreeCalculator from './components/FreeCalculator';
 import ProductsGrid from './components/ProductsGrid';
+import TrustSection from './components/TrustSection';
 import BundleSection from './components/BundleSection';
 import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
@@ -12,6 +13,7 @@ import P1View from './components/P1View';
 import P2View from './components/P2View';
 import P3View from './components/P3View';
 import P4View from './components/P4View';
+import Dashboard from './components/Dashboard';
 import AboutView from './components/AboutView';
 import LegalView from './components/LegalView';
 import Modals from './components/Modals';
@@ -78,7 +80,7 @@ function App() {
         </div>
       )}
 
-      <Header currentView={currentView} goHome={goHome} />
+      <Header currentView={currentView} goHome={goHome} openDashboard={() => { setCurrentView('dashboard'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
       <NewsTicker />
 
       <main>
@@ -93,6 +95,7 @@ function App() {
               setActiveModal={setActiveModal}
             />
             <ProductsGrid openProduct={openProduct} showComingSoon={showComingSoon} />
+            <TrustSection />
             <BundleSection />
             <HowItWorks />
           </>
@@ -114,6 +117,10 @@ function App() {
           <P4View goHome={goHome} showToast={showToast} />
         )}
 
+        {currentView === 'dashboard' && (
+          <Dashboard goHome={goHome} openProduct={openProduct} />
+        )}
+
         {currentView === 'about' && (
           <AboutView goHome={goHome} />
         )}
@@ -126,6 +133,7 @@ function App() {
       <Footer
         onNavigateAbout={() => { setCurrentView('about'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
         onNavigateLegal={(page) => { setCurrentView(page); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+        onNavigateDashboard={() => { setCurrentView('dashboard'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
       />
       
       <Modals 

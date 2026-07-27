@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReportGenerating from './ReportGenerating';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-432180395696.asia-south1.run.app';
@@ -9,6 +10,7 @@ const P3View = ({ goHome, showToast }) => {
   const [formData, setFormData] = useState({ name: '', email: '', language: 'hi', ctc: '', basic: '', hra: '', da: '', special: '', currentPF: '', empType: 'permanent', yearsOfService: '', annualEmployerPfNps: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [genStage, setGenStage] = useState(null);
 
   const handleChange = (field, value) => { setFormData(prev => ({ ...prev, [field]: value })); setErrors(prev => ({ ...prev, [field]: '' })); };
 
@@ -64,6 +66,7 @@ const P3View = ({ goHome, showToast }) => {
         description: 'Naya Wage Code Jaanch Report',
         order_id: orderData.orderId,
         handler: async function (response) {
+          setGenStage(0);
           const verifyRes = await fetch(`${BACKEND_URL}/api/p3/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -76,7 +79,8 @@ const P3View = ({ goHome, showToast }) => {
           const verifyData = await verifyRes.json();
 
           if (verifyData.verified) {
-            const reportRes = await fetch(`${BACKEND_URL}/api/p3/generate-report`, {
+            setGenStage(1);
+            const reportPromise = fetch(`${BACKEND_URL}/api/p3/generate-report`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -87,15 +91,23 @@ const P3View = ({ goHome, showToast }) => {
                 wage: buildWagePayload()
               })
             });
+            await new Promise(r => setTimeout(r, 900));
+            setGenStage(2);
+            const reportRes = await reportPromise;
             const reportData = await reportRes.json();
+            setGenStage(3);
+            await new Promise(r => setTimeout(r, 700));
 
             if (reportData.success) {
               showToast('Wage Code Jaanch generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+              setGenStage(null);
               goHome();
             } else {
+              setGenStage(null);
               showToast('Report generation failed. Please contact support.', 'error');
             }
           } else {
+            setGenStage(null);
             showToast('Payment verification failed. Please contact support.', 'error');
           }
         },
@@ -219,6 +231,7 @@ const P3View = ({ goHome, showToast }) => {
           </div>
         )}
       </div>
+      {genStage !== null && <ReportGenerating stage={genStage} productName="Naya Wage Code Jaanch" />}
     </div>
   );
 };

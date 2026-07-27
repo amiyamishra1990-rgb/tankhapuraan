@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Header = ({ currentView, goHome }) => {
+const Header = ({ currentView, goHome, openDashboard }) => {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -27,6 +27,11 @@ const Header = ({ currentView, goHome }) => {
           {currentView !== 'home' && (
             <button className="back-btn" onClick={goHome}>
               <i className="fas fa-arrow-left"></i> Wapas Home
+            </button>
+          )}
+          {currentView === 'home' && (
+            <button className="back-btn" onClick={openDashboard}>
+              <i className="fas fa-file-invoice"></i> My Reports
             </button>
           )}
           <select className="lang-select" aria-label="Select Language">

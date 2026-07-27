@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReportGenerating from './ReportGenerating';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-432180395696.asia-south1.run.app';
@@ -9,6 +10,7 @@ const P2View = ({ goHome, showToast }) => {
   const [formData, setFormData] = useState({ name: '', email: '', month: '7', empType: 'permanent', state: 'MH', language: 'hi', basic: '', hra: '', da: '', conveyance: '', medical: '', special: '', otherEarn: '', pf: '', esi: '', pt: '', tds: '', otherDed: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [genStage, setGenStage] = useState(null);
 
   const handleChange = (field, value) => { setFormData(prev => ({ ...prev, [field]: value })); setErrors(prev => ({ ...prev, [field]: '' })); };
 
@@ -72,6 +74,7 @@ const P2View = ({ goHome, showToast }) => {
         description: 'Slip Pariksha Report',
         order_id: orderData.orderId,
         handler: async function (response) {
+          setGenStage(0);
           // Step 3: Verify Payment
           const verifyRes = await fetch(`${BACKEND_URL}/api/p2/verify-payment`, {
             method: 'POST',
@@ -85,8 +88,9 @@ const P2View = ({ goHome, showToast }) => {
           const verifyData = await verifyRes.json();
 
           if (verifyData.verified) {
+            setGenStage(1);
             // Step 4: Generate Report
-            const reportRes = await fetch(`${BACKEND_URL}/api/p2/generate-report`, {
+            const reportPromise = fetch(`${BACKEND_URL}/api/p2/generate-report`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -97,15 +101,23 @@ const P2View = ({ goHome, showToast }) => {
                 slip: buildSlipPayload()
               })
             });
+            await new Promise(r => setTimeout(r, 900));
+            setGenStage(2);
+            const reportRes = await reportPromise;
             const reportData = await reportRes.json();
+            setGenStage(3);
+            await new Promise(r => setTimeout(r, 700));
 
             if (reportData.success) {
               showToast('Slip Pariksha generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+              setGenStage(null);
               goHome();
             } else {
+              setGenStage(null);
               showToast('Report generation failed. Please contact support.', 'error');
             }
           } else {
+            setGenStage(null);
             showToast('Payment verification failed. Please contact support.', 'error');
           }
         },
@@ -246,6 +258,7 @@ const P2View = ({ goHome, showToast }) => {
           </div>
         )}
       </div>
+      {genStage !== null && <ReportGenerating stage={genStage} productName="Slip Pariksha" />}
     </div>
   );
 };

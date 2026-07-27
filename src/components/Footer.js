@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Footer = ({ onNavigateAbout, onNavigateLegal }) => (
+const Footer = ({ onNavigateAbout, onNavigateLegal, onNavigateDashboard }) => (
   <footer className="site-footer">
     <div className="footer-inner">
       <div className="footer-top">
@@ -20,6 +20,7 @@ const Footer = ({ onNavigateAbout, onNavigateLegal }) => (
             <a href="#calcSection">Tankha Puraan Patrika</a>
             <a href="#productsSection">Slip Pariksha</a>
             <a href="#productsSection">Naya Wage Code Jaanch</a>
+            <a href="#productsSection">Hike Mantra</a>
           </div>
           <div className="footer-link-group">
             <h4>Legal</h4>
@@ -30,7 +31,9 @@ const Footer = ({ onNavigateAbout, onNavigateLegal }) => (
           </div>
           <div className="footer-link-group">
             <h4>Company</h4>
-            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateAbout && onNavigateAbout(); }}>About ASPOVO</a><a href="#">Contact</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateAbout && onNavigateAbout(); }}>About ASPOVO</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateDashboard && onNavigateDashboard(); }}>My Reports</a>
+            <a href="mailto:help@tankhapuraan.com">Contact</a>
           </div>
         </div>
       </div>

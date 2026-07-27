@@ -41,7 +41,7 @@ const Hero = () => {
             <i className="fas fa-calculator" style={{marginRight:'6px'}}></i> Free Tax Calculator
           </button>
           <button className="btn-secondary" onClick={scrollToProducts}>
-            Explore All Tools <i className="fas fa-arrow-down" style={{marginLeft:'6px'}}></i>
+            See All Reports <i className="fas fa-arrow-down" style={{marginLeft:'6px'}}></i>
           </button>
         </div>
       </div>

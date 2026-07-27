@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
+import ReportGenerating from './ReportGenerating';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-432180395696.asia-south1.run.app';
 const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
@@ -14,6 +15,7 @@ const P4View = ({ goHome, showToast }) => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [genStage, setGenStage] = useState(null); // null = hidden, 0-3 = active step
 
   const handleChange = (field, value) => { setFormData(prev => ({ ...prev, [field]: value })); setErrors(prev => ({ ...prev, [field]: '' })); };
 
@@ -78,6 +80,7 @@ const P4View = ({ goHome, showToast }) => {
         description: 'Hike Mantra Report',
         order_id: orderData.orderId,
         handler: async function (response) {
+          setGenStage(0);
           const verifyRes = await fetch(`${BACKEND_URL}/api/p4/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -90,7 +93,8 @@ const P4View = ({ goHome, showToast }) => {
           const verifyData = await verifyRes.json();
 
           if (verifyData.verified) {
-            const reportRes = await fetch(`${BACKEND_URL}/api/p4/generate-report`, {
+            setGenStage(1);
+            const reportPromise = fetch(`${BACKEND_URL}/api/p4/generate-report`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -101,15 +105,24 @@ const P4View = ({ goHome, showToast }) => {
                 hike: buildHikePayload()
               })
             });
+            // Give the "calculating" step a moment to register before the (longer) generation step
+            await new Promise(r => setTimeout(r, 900));
+            setGenStage(2);
+            const reportRes = await reportPromise;
             const reportData = await reportRes.json();
+            setGenStage(3);
+            await new Promise(r => setTimeout(r, 700));
 
             if (reportData.success) {
               showToast('Hike Mantra generate ho raha hai! Email check karo 10 minute mein.', 'success');
+              setGenStage(null);
               goHome();
             } else {
+              setGenStage(null);
               showToast('Report generation failed. Please contact support.', 'error');
             }
           } else {
+            setGenStage(null);
             showToast('Payment verification failed. Please contact support.', 'error');
           }
         },
@@ -234,6 +247,7 @@ const P4View = ({ goHome, showToast }) => {
           </div>
         )}
       </div>
+      {genStage !== null && <ReportGenerating stage={genStage} productName="Hike Mantra Report" />}
     </div>
   );
 };

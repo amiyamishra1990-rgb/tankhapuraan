@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReportGenerating from './ReportGenerating';
 import { parseNum, formatCurrency, formatNum, validateEmail } from '../utils/taxCalculator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-production.up.railway.app';
@@ -18,6 +19,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [genStage, setGenStage] = useState(null);
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderId, setOrderId] = useState(null);
 
@@ -93,6 +95,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
         description: 'Tax Comparison Patrika',
         order_id: orderData.orderId,
         handler: async function (response) {
+          setGenStage(0);
           // Step 3: Verify Payment
           const verifyRes = await fetch(`${BACKEND_URL}/api/p1/verify-payment`, {
             method: 'POST',
@@ -107,8 +110,9 @@ const P1View = ({ goHome, calcResult, showToast }) => {
           const verifyData = await verifyRes.json();
           
           if (verifyData.verified) {
+            setGenStage(1);
             // Step 4: Generate Report
-            const reportRes = await fetch(`${BACKEND_URL}/api/p1/generate-report`, {
+            const reportPromise = fetch(`${BACKEND_URL}/api/p1/generate-report`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -128,15 +132,23 @@ const P1View = ({ goHome, calcResult, showToast }) => {
               })
             });
             
+            await new Promise(r => setTimeout(r, 900));
+            setGenStage(2);
+            const reportRes = await reportPromise;
             const reportData = await reportRes.json();
+            setGenStage(3);
+            await new Promise(r => setTimeout(r, 700));
             
             if (reportData.success) {
               showToast('Patrika generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+              setGenStage(null);
               goHome();
             } else {
+              setGenStage(null);
               showToast('Report generation failed. Please contact support.', 'error');
             }
           } else {
+            setGenStage(null);
             showToast('Payment verification failed. Please contact support.', 'error');
           }
         },
@@ -348,6 +360,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
           </div>
         )}
       </div>
+      {genStage !== null && <ReportGenerating stage={genStage} productName="Tankha Puraan Patrika" />}
     </div>
   );
 };
