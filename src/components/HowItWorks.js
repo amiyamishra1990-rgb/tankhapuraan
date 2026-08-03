@@ -15,8 +15,8 @@ const HowItWorks = () => (
         </div>
         <div className="how-step reveal">
           <div className="how-number">2</div>
-          <h3 className="how-title">Pay Karo</h3>
-          <p className="how-desc">Razorpay se secure payment — UPI, Card, Net Banking sab chalta hai. Auto-refund agar pipeline fail.</p>
+          <h3 className="how-title">Email Do</h3>
+          <p className="how-desc">Bas apna email daalo — koi payment nahi, koi card nahi. 100% free, hamesha ke liye.</p>
         </div>
         <div className="how-step reveal">
           <div className="how-number">3</div>

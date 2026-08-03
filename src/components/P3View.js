@@ -3,7 +3,6 @@ import ReportGenerating from './ReportGenerating';
 import { parseNum, formatCurrency, validateEmail } from '../utils/taxCalculator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-432180395696.asia-south1.run.app';
-const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
 
 const P3View = ({ goHome, showToast }) => {
   const [step, setStep] = useState(1);
@@ -19,15 +18,6 @@ const P3View = ({ goHome, showToast }) => {
   const calcRequiredMin = () => Math.round(calcGrossMonthly() * 0.5);
   const isCompliant = () => calcWageBase() >= calcRequiredMin() - 50;
 
-  const loadRazorpay = () => new Promise((resolve) => {
-    if (window.Razorpay) return resolve(true);
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-
   const buildWagePayload = () => ({
     ctc: parseNum(formData.ctc), basic: parseNum(formData.basic), hra: parseNum(formData.hra),
     da: parseNum(formData.da), special: parseNum(formData.special),
@@ -35,92 +25,39 @@ const P3View = ({ goHome, showToast }) => {
     yearsOfService: parseNum(formData.yearsOfService), annualEmployerPfNps: parseNum(formData.annualEmployerPfNps)
   });
 
-  const handlePayment = async () => {
+  const handleGetReport = async () => {
     setLoading(true);
     try {
-      const razorpayReady = await loadRazorpay();
-      if (!razorpayReady) {
-        showToast('Razorpay load nahi hua. Ad-blocker band karke try karo.', 'error');
-        setLoading(false);
-        return;
-      }
-
-      const orderRes = await fetch(`${BACKEND_URL}/api/p3/create-order`, {
+      setGenStage(0);
+      const reportPromise = fetch(`${BACKEND_URL}/api/p3/generate-report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: formData.name, email: formData.email, language: formData.language })
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          language: formData.language,
+          wage: buildWagePayload()
+        })
       });
-      const orderData = await orderRes.json();
+      await new Promise(r => setTimeout(r, 900));
+      setGenStage(1);
+      const reportRes = await reportPromise;
+      const reportData = await reportRes.json();
+      setGenStage(2);
+      await new Promise(r => setTimeout(r, 700));
 
-      if (!orderData.orderId) {
-        showToast('Order create nahi hua. Try again.', 'error');
-        setLoading(false);
-        return;
+      if (reportData.success) {
+        showToast('Wage Code Jaanch generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+        setGenStage(null);
+        goHome();
+      } else {
+        setGenStage(null);
+        showToast(reportData.error || 'Report generation failed. Please try again.', 'error');
       }
-
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: 'INR',
-        name: 'Tankha Puraan',
-        description: 'Naya Wage Code Jaanch Report',
-        order_id: orderData.orderId,
-        handler: async function (response) {
-          setGenStage(0);
-          const verifyRes = await fetch(`${BACKEND_URL}/api/p3/verify-payment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            })
-          });
-          const verifyData = await verifyRes.json();
-
-          if (verifyData.verified) {
-            setGenStage(1);
-            const reportPromise = fetch(`${BACKEND_URL}/api/p3/generate-report`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: formData.name,
-                email: formData.email,
-                language: formData.language,
-                paymentId: response.razorpay_payment_id,
-                wage: buildWagePayload()
-              })
-            });
-            await new Promise(r => setTimeout(r, 900));
-            setGenStage(2);
-            const reportRes = await reportPromise;
-            const reportData = await reportRes.json();
-            setGenStage(3);
-            await new Promise(r => setTimeout(r, 700));
-
-            if (reportData.success) {
-              showToast('Wage Code Jaanch generate ho rahi hai! Email check karo 10 minute mein.', 'success');
-              setGenStage(null);
-              goHome();
-            } else {
-              setGenStage(null);
-              showToast('Report generation failed. Please contact support.', 'error');
-            }
-          } else {
-            setGenStage(null);
-            showToast('Payment verification failed. Please contact support.', 'error');
-          }
-        },
-        prefill: { name: formData.name, email: formData.email },
-        theme: { color: '#7C1316' }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-
     } catch (err) {
-      console.error('Payment error:', err);
-      showToast('Payment initiation failed. Please try again.', 'error');
+      console.error('Report error:', err);
+      setGenStage(null);
+      showToast('Something went wrong. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -161,7 +98,7 @@ const P3View = ({ goHome, showToast }) => {
           <p className="product-view-adhyaya">◆ Adhyaya III — Vetan Sanhita ◆</p>
           <h2 className="product-view-title">Naya Wage Code Jaanch</h2>
           <p className="product-view-tagline">Naye Labour Codes ne tumhari salary structure badal di? 50% wage rule compliance check, chhupa hua take-home impact, aur gratuity growth — sab ek report mein.</p>
-          <span className="product-view-price-tag">₹99 / report</span>
+          <span className="product-view-price-tag">FREE Report</span>
         </div>
         <div className="wizard-steps">
           {[1,2,3].map(i => (
@@ -204,13 +141,13 @@ const P3View = ({ goHome, showToast }) => {
               <div className="form-group"><label className="form-label">Current Monthly PF Deduction</label><input type="text" className={`form-input${errors.currentPF ? ' error' : ''}`} value={formData.currentPF} onChange={e => handleChange('currentPF', e.target.value)} placeholder="0" inputMode="numeric" /><span className="form-error">{errors.currentPF}</span></div>
               <div className="form-group full-width"><label className="form-label">Employer's Annual PF+NPS Contribution (agar pata ho, optional)</label><input type="text" className="form-input" value={formData.annualEmployerPfNps} onChange={e => handleChange('annualEmployerPfNps', e.target.value)} placeholder="e.g. 250000 (skip if not sure)" inputMode="numeric" /></div>
             </div>
-            <div className="wizard-nav"><button className="btn-prev" onClick={prevStep}><i className="fas fa-arrow-left" style={{marginRight:'6px'}}></i> Back</button><button className="btn-next" onClick={nextStep}>Next — Review & Pay <i className="fas fa-arrow-right" style={{marginLeft:'6px'}}></i></button></div>
+            <div className="wizard-nav"><button className="btn-prev" onClick={prevStep}><i className="fas fa-arrow-left" style={{marginRight:'6px'}}></i> Back</button><button className="btn-next" onClick={nextStep}>Next — Review & Get Report <i className="fas fa-arrow-right" style={{marginLeft:'6px'}}></i></button></div>
           </div>
         )}
 
         {step === 3 && (
           <div className="form-card">
-            <h3 className="form-section-title">◆ Review & Pay</h3>
+            <h3 className="form-section-title">◆ Review & Get Your Report</h3>
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',fontSize:'0.9rem',marginBottom:'24px'}}>
               <div><span style={{fontFamily:'var(--font-ui)',fontSize:'0.72rem',color:'var(--muted)'}}>Name</span><br/><strong>{formData.name}</strong></div>
               <div><span style={{fontFamily:'var(--font-ui)',fontSize:'0.72rem',color:'var(--muted)'}}>Email</span><br/><strong>{formData.email}</strong></div>
@@ -222,8 +159,8 @@ const P3View = ({ goHome, showToast }) => {
               </div>
             </div>
             <div style={{textAlign:'center'}}>
-              <button className="btn-gold" onClick={handlePayment} disabled={loading}>
-                {loading ? (<><i className="fas fa-spinner fa-spin" style={{marginRight:'6px'}}></i> Processing...</>) : (<><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹99 via Razorpay</>)}
+              <button className="btn-gold" onClick={handleGetReport} disabled={loading}>
+                {loading ? (<><i className="fas fa-spinner fa-spin" style={{marginRight:'6px'}}></i> Generating...</>) : (<><i className="fas fa-scroll" style={{marginRight:'6px'}}></i> Get My Free Report</>)}
               </button>
               <p style={{fontFamily:'var(--font-ui)',fontSize:'0.7rem',color:'var(--muted)',marginTop:'10px'}}>Auto-refund if report is not delivered in 10 minutes</p>
             </div>

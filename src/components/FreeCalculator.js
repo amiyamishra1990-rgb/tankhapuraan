@@ -78,7 +78,7 @@ const FreeCalculator = ({ setCalcResult, calcResult, openProduct, setActiveModal
               <div className="emotional-hook"><p>{getEmotionalHook(calcResult.savings)}</p></div>
               <div className="verdict-cta">
                 <p>Yeh toh bas trailer hai. Puri Patrika lelo — slab-by-slab breakdown, deduction optimizer, HR declaration letter, sab kuch.</p>
-                <button className="btn-gold" onClick={() => setActiveModal('nameEmail')}>Get Your Tankha Puraan Patrika — ₹99</button>
+                <button className="btn-gold" onClick={() => openProduct('p1')}>Get Your Free Tankha Puraan Patrika</button>
               </div>
             </div>
           )}

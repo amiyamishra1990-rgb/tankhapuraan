@@ -2,9 +2,9 @@ import React from 'react';
 
 const cards = [
   {
-    icon: 'fa-lock',
-    title: 'Bank-Grade Payment Security',
-    desc: 'Every payment runs through Razorpay, the same PCI-DSS certified infrastructure used by India\'s leading banks and businesses. Tankha Puraan never sees or stores your card, UPI, or bank details — that data never touches our servers at all.'
+    icon: 'fa-envelope-circle-check',
+    title: '100% Free, No Card Required',
+    desc: 'Every report on Tankha Puraan is completely free — no payment, no card, no hidden charges. We only ask for your email so we can send you the report. That\'s the entire transaction.'
   },
   {
     icon: 'fa-user-shield',
@@ -14,7 +14,7 @@ const cards = [
   {
     icon: 'fa-bolt',
     title: 'Instant, Automated Delivery',
-    desc: 'Once payment is verified, your report is generated and emailed within minutes — no human ever reviews or delays it. If generation fails for any reason, you\'re auto-refunded within 10 minutes, no questions asked.'
+    desc: 'Once you submit your details, your report is generated and emailed within minutes — no human ever reviews or delays it. If generation fails for any reason, just try again — there\'s nothing to refund because there was never a charge.'
   },
   {
     icon: 'fa-scroll',
@@ -29,7 +29,7 @@ const TrustSection = () => (
       <div className="products-header reveal">
         <p className="calc-label">◆ Why You Can Trust This ◆</p>
         <h2 className="calc-title">Built To Be Trusted With Your Salary</h2>
-        <p className="calc-subtitle">The same seriousness a bank or a CA would bring — applied to a ₹99 report.</p>
+        <p className="calc-subtitle">The same seriousness a bank or a CA would bring — applied to a free report.</p>
       </div>
 
       <div className="trust-grid">
@@ -45,7 +45,7 @@ const TrustSection = () => (
       <div className="founder-promise reveal">
         <p className="founder-promise-label">◆ The Founder's Promise ◆</p>
         <p className="founder-promise-text">
-          "Tankha Puraan exists because no salaried Indian should need to guess what their payslip means, whether their employer is playing fair, or what the law actually entitles them to. We built the CA, the vakeel, and the advisor most people can't afford into one ₹99 report — with real law behind every number, and nothing hidden in the fine print."
+          "Tankha Puraan exists because no salaried Indian should need to guess what their payslip means, whether their employer is playing fair, or what the law actually entitles them to. We built the CA, the vakeel, and the advisor most people can't afford into a free report — with real law behind every number, and nothing hidden in the fine print."
         </p>
         <p className="founder-promise-sign">— A Proud Indian, Founder, Tankha Puraan</p>
       </div>

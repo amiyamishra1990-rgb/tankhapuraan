@@ -1,8 +1,7 @@
 import React from 'react';
 
-// stage: 0 = verifying payment, 1 = calculating, 2 = generating PDF, 3 = sending email, 4 = done
+// stage: 0 = calculating, 1 = generating PDF, 2 = sending email
 const STEPS = [
-  { label: 'Verifying your payment' },
   { label: 'Running your numbers against the law' },
   { label: 'Generating your report' },
   { label: 'Sending it to your email' }

@@ -26,7 +26,7 @@ const Footer = ({ onNavigateAbout, onNavigateLegal, onNavigateDashboard }) => (
             <h4>Legal</h4>
             <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('privacy'); }}>Privacy Policy</a>
             <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('terms'); }}>Terms of Service</a>
-            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('refund'); }}>Refund Policy</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('refund'); }}>Free Reports Policy</a>
             <a href="#" onClick={(e) => { e.preventDefault(); onNavigateLegal && onNavigateLegal('disclaimer'); }}>Disclaimer</a>
           </div>
           <div className="footer-link-group">

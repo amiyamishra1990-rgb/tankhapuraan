@@ -6,7 +6,6 @@ import TrustBar from './components/TrustBar';
 import FreeCalculator from './components/FreeCalculator';
 import ProductsGrid from './components/ProductsGrid';
 import TrustSection from './components/TrustSection';
-import BundleSection from './components/BundleSection';
 import HowItWorks from './components/HowItWorks';
 import Footer from './components/Footer';
 import P1View from './components/P1View';
@@ -94,9 +93,8 @@ function App() {
               openProduct={openProduct}
               setActiveModal={setActiveModal}
             />
-            <ProductsGrid openProduct={openProduct} showComingSoon={showComingSoon} />
+            <ProductsGrid openProduct={openProduct} />
             <TrustSection />
-            <BundleSection />
             <HowItWorks />
           </>
         )}

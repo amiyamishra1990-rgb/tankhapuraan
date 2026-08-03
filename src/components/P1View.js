@@ -3,7 +3,6 @@ import ReportGenerating from './ReportGenerating';
 import { parseNum, formatCurrency, formatNum, validateEmail } from '../utils/taxCalculator';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://tankhapuraan-backend-production.up.railway.app';
-const RAZORPAY_KEY_ID = process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_T0o9KcbQlYwweH';
 
 const P1View = ({ goHome, calcResult, showToast }) => {
   const [step, setStep] = useState(1);
@@ -20,8 +19,6 @@ const P1View = ({ goHome, calcResult, showToast }) => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [genStage, setGenStage] = useState(null);
-  const [orderCreated, setOrderCreated] = useState(false);
-  const [orderId, setOrderId] = useState(null);
 
   const handleChange = (field, value) => { setFormData(prev => ({ ...prev, [field]: value })); setErrors(prev => ({ ...prev, [field]: '' })); };
 
@@ -39,31 +36,12 @@ const P1View = ({ goHome, calcResult, showToast }) => {
   const nextStep = () => { if (validateStep(step)) setStep(step + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const prevStep = () => { setStep(step - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
-  // ===== RAZORPAY INTEGRATION =====
-
-  // Ensure checkout.js is loaded (fallback if the index.html script was blocked or slow)
-  const loadRazorpay = () => new Promise((resolve) => {
-    if (window.Razorpay) return resolve(true);
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-
-  const handlePayment = async () => {
+  // ===== FREE REPORT — no payment, straight to generation =====
+  const handleGetReport = async () => {
     setLoading(true);
-
     try {
-      const razorpayReady = await loadRazorpay();
-      if (!razorpayReady) {
-        showToast('Razorpay load nahi hua. Ad-blocker band karke try karo.', 'error');
-        setLoading(false);
-        return;
-      }
-
-      // Step 1: Create Razorpay Order
-      const orderRes = await fetch(`${BACKEND_URL}/api/p1/create-order`, {
+      setGenStage(0);
+      const reportPromise = fetch(`${BACKEND_URL}/api/p1/generate-report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -81,92 +59,26 @@ const P1View = ({ goHome, calcResult, showToast }) => {
           language: formData.language
         })
       });
-      
-      const orderData = await orderRes.json();
-      setOrderId(orderData.orderId);
-      setOrderCreated(true);
-      
-      // Step 2: Open Razorpay Checkout
-      const options = {
-        key: RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: 'INR',
-        name: 'Tankha Puraan',
-        description: 'Tax Comparison Patrika',
-        order_id: orderData.orderId,
-        handler: async function (response) {
-          setGenStage(0);
-          // Step 3: Verify Payment
-          const verifyRes = await fetch(`${BACKEND_URL}/api/p1/verify-payment`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            })
-          });
-          
-          const verifyData = await verifyRes.json();
-          
-          if (verifyData.verified) {
-            setGenStage(1);
-            // Step 4: Generate Report
-            const reportPromise = fetch(`${BACKEND_URL}/api/p1/generate-report`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                ctc: parseNum(formData.ctc),
-                deductions: {
-                  sec80c: parseNum(formData.sec80c),
-                  hra: parseNum(formData.hra),
-                  nps: parseNum(formData.nps),
-                  homeLoan: parseNum(formData.homeLoan),
-                  med80d: parseNum(formData.med80d),
-                  other: parseNum(formData.other)
-                },
-                name: formData.name,
-                email: formData.email,
-                language: formData.language,
-                paymentId: response.razorpay_payment_id
-              })
-            });
-            
-            await new Promise(r => setTimeout(r, 900));
-            setGenStage(2);
-            const reportRes = await reportPromise;
-            const reportData = await reportRes.json();
-            setGenStage(3);
-            await new Promise(r => setTimeout(r, 700));
-            
-            if (reportData.success) {
-              showToast('Patrika generate ho rahi hai! Email check karo 10 minute mein.', 'success');
-              setGenStage(null);
-              goHome();
-            } else {
-              setGenStage(null);
-              showToast('Report generation failed. Please contact support.', 'error');
-            }
-          } else {
-            setGenStage(null);
-            showToast('Payment verification failed. Please contact support.', 'error');
-          }
-        },
-        prefill: {
-          name: formData.name,
-          email: formData.email
-        },
-        theme: {
-          color: '#7C1316'
-        }
-      };
-      
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-      
+
+      await new Promise(r => setTimeout(r, 900));
+      setGenStage(1);
+      const reportRes = await reportPromise;
+      const reportData = await reportRes.json();
+      setGenStage(2);
+      await new Promise(r => setTimeout(r, 700));
+
+      if (reportData.success) {
+        showToast('Patrika generate ho rahi hai! Email check karo 10 minute mein.', 'success');
+        setGenStage(null);
+        goHome();
+      } else {
+        setGenStage(null);
+        showToast(reportData.error || 'Report generation failed. Please try again.', 'error');
+      }
     } catch (err) {
-      console.error('Payment error:', err);
-      showToast('Payment initiation failed. Please try again.', 'error');
+      console.error('Report error:', err);
+      setGenStage(null);
+      showToast('Something went wrong. Please try again.', 'error');
     } finally {
       setLoading(false);
     }
@@ -205,7 +117,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
           <p className="product-view-adhyaya">◆ Adhyaya I — Kar Vyavastha Vishleshan ◆</p>
           <h2 className="product-view-title">Tankha Puraan Patrika</h2>
           <p className="product-view-tagline">Old vs New regime — kaun sa bachata hai zyada paisa?</p>
-          <span className="product-view-price-tag">₹99 / report</span>
+          <span className="product-view-price-tag">FREE Report</span>
         </div>
         
         <div className="wizard-steps">
@@ -303,7 +215,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
                 <i className="fas fa-arrow-left" style={{marginRight:'6px'}}></i> Back
               </button>
               <button className="btn-next" onClick={nextStep}>
-                Next — Review & Pay <i className="fas fa-arrow-right" style={{marginLeft:'6px'}}></i>
+                Next — Review &amp; Get Report <i className="fas fa-arrow-right" style={{marginLeft:'6px'}}></i>
               </button>
             </div>
           </div>
@@ -311,7 +223,7 @@ const P1View = ({ goHome, calcResult, showToast }) => {
 
         {step === 3 && (
           <div className="form-card">
-            <h3 className="form-section-title">◆ Review & Pay</h3>
+            <h3 className="form-section-title">◆ Review &amp; Get Your Report</h3>
             
             <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'12px',fontSize:'0.9rem',marginBottom:'24px'}}>
               <div>
@@ -333,21 +245,21 @@ const P1View = ({ goHome, calcResult, showToast }) => {
             </div>
             
             <div style={{textAlign:'center',padding:'20px',background:'var(--parchment-deep)',borderRadius:'8px',border:'1px dashed var(--gold)',marginBottom:'20px'}}>
-              <p style={{fontFamily:'var(--font-cinzel)',fontSize:'0.7rem',color:'var(--sindoor-dark)',letterSpacing:'0.2em',textTransform:'uppercase',marginBottom:'8px'}}>Total Amount</p>
-              <p style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'2.2rem',color:'var(--sindoor-dark)'}}>₹99</p>
-              <p style={{fontFamily:'var(--font-ui)',fontSize:'0.75rem',color:'var(--muted)'}}>inclusive of all taxes | Secured by Razorpay</p>
+              <p style={{fontFamily:'var(--font-cinzel)',fontSize:'0.7rem',color:'var(--sindoor-dark)',letterSpacing:'0.2em',textTransform:'uppercase',marginBottom:'8px'}}>Your Report</p>
+              <p style={{fontFamily:'var(--font-display)',fontWeight:900,fontSize:'2.2rem',color:'var(--green)'}}>FREE</p>
+              <p style={{fontFamily:'var(--font-ui)',fontSize:'0.75rem',color:'var(--muted)'}}>No card, no payment — just your email</p>
             </div>
             
             <div style={{textAlign:'center'}}>
-              <button className="btn-gold" onClick={handlePayment} disabled={loading}>
+              <button className="btn-gold" onClick={handleGetReport} disabled={loading}>
                 {loading ? (
-                  <span><i className="fas fa-spinner fa-spin" style={{marginRight:'8px'}}></i> Processing...</span>
+                  <span><i className="fas fa-spinner fa-spin" style={{marginRight:'8px'}}></i> Generating...</span>
                 ) : (
-                  <span><i className="fas fa-lock" style={{marginRight:'6px'}}></i> Pay ₹99 via Razorpay</span>
+                  <span><i className="fas fa-scroll" style={{marginRight:'6px'}}></i> Get My Free Report</span>
                 )}
               </button>
               <p style={{fontFamily:'var(--font-ui)',fontSize:'0.7rem',color:'var(--muted)',marginTop:'10px'}}>
-                Secured by Razorpay | Report delivered to email in 10 minutes
+                Delivered to your email in under 10 minutes
               </p>
             </div>
             

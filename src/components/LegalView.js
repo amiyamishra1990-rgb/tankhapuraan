@@ -5,10 +5,10 @@ const SECTIONS = {
     title: 'Privacy Policy',
     updated: 'Last updated: July 2026',
     body: [
-      ['What We Collect', 'When you use Tankha Puraan, we collect: your name and email address, the financial figures you enter into a report wizard (such as CTC, salary components, or deduction amounts), your chosen report language, and payment confirmation details from Razorpay (we never see or store your card, UPI, or bank details directly — Razorpay handles that).'],
-      ['Why We Collect It', 'This information exists only to generate the specific report you paid for and email it to you. We do not use it for advertising, and we do not sell your data to anyone.'],
-      ['How Your Data Flows', 'The financial figures you enter are sent to our AI provider (built on Anthropic\'s Claude models) to generate the narrative portions of your report, and to our PDF and email delivery systems (Brevo) to produce and send the final document. These are processing steps, not data-sharing for their own purposes.'],
-      ['What We Retain', 'We retain your name, email, and payment reference (for support and refund purposes) after your report is delivered. We do not retain the detailed salary/financial figures you entered beyond what is needed to generate and deliver your report.'],
+      ['What We Collect', 'When you use Tankha Puraan, we collect: your name and email address, the financial figures you enter into a report wizard (such as CTC, salary components, or deduction amounts), and your chosen report language. All Tankha Puraan reports are free — we do not collect any payment or card information.'],
+      ['Why We Collect It', 'This information exists to generate the specific report you requested and email it to you, and to add you as a contact so we can occasionally share genuinely useful updates — new reports, relevant law changes, or other ASPOVO products. We do not use it for third-party advertising, and we do not sell your data to anyone. You can unsubscribe from any email at any time.'],
+      ['How Your Data Flows', 'The financial figures you enter are sent to our AI provider (built on Anthropic\'s Claude models) to generate the narrative portions of your report, to our PDF and email delivery systems (Brevo) to produce and send the final document, and stored as a contact in Brevo for the communications described above. These are processing steps, not data-sharing for their own purposes.'],
+      ['What We Retain', 'We retain your name and email (for delivering reports and future updates) after your report is delivered. We do not retain the detailed salary/financial figures you entered beyond what is needed to generate and deliver your report.'],
       ['Your Rights', 'You can request a copy of what we hold about you, or request deletion of your data, by emailing help@tankhapuraan.com. We will respond within a reasonable time.'],
       ['Children', 'Tankha Puraan is intended for salaried adults in India. We do not knowingly collect data from anyone under 18.'],
       ['Changes', 'We may update this policy as our products evolve. Material changes will be reflected here with an updated date.'],
@@ -22,9 +22,9 @@ const SECTIONS = {
       ['What Tankha Puraan Is', 'Tankha Puraan (a product of ASPOVO) provides AI-generated, informational reports for salaried individuals in India — covering topics like income tax regime comparison, salary slip verification, and labour law compliance. Reports are generated based on the figures you provide and publicly available Indian tax laws, labour codes, and EPFO/ESIC regulations.'],
       ['Not Professional Advice', 'Our reports are informational only and do not constitute tax, legal, or financial advice. For decisions with real financial or legal consequences, consult a qualified Chartered Accountant, lawyer, or financial advisor. Tankha Puraan and ASPOVO are not liable for any financial or legal loss arising from use of our reports.'],
       ['Accuracy of Inputs', 'Our calculations are only as accurate as the information you provide. You are responsible for entering correct figures.'],
-      ['Payments', 'Each report is a one-time paid purchase via Razorpay, priced as shown at checkout. Payment confirms your order; report generation begins only after payment is verified.'],
+      ['Our Reports Are Free', 'Every report on Tankha Puraan is currently free of charge. We only ask for your name, email, and the figures needed to generate your report — no payment or card details are required.'],
       ['Eligibility', 'Our services are intended for individuals aged 18 and above, primarily salaried employees in India.'],
-      ['Acceptable Use', 'You agree not to misuse the platform — including attempting to access other users\' data, submitting fraudulent payment information, or using the service for any unlawful purpose.'],
+      ['Acceptable Use', 'You agree not to misuse the platform — including attempting to access other users\' data, submitting deliberately false information to abuse our free reports, or using the service for any unlawful purpose.'],
       ['Intellectual Property', 'The Tankha Puraan brand, design, and report templates are the property of ASPOVO. The report generated for you is yours to use personally.'],
       ['Changes to Service', 'We may update, modify, or discontinue features of Tankha Puraan at any time. We will make reasonable efforts to notify users of material changes.'],
       ['Governing Law', 'These terms are governed by the laws of India. Any disputes will be subject to the jurisdiction of Indian courts.'],
@@ -32,15 +32,14 @@ const SECTIONS = {
     ]
   },
   refund: {
-    title: 'Refund Policy',
+    title: 'Free Reports Policy',
     updated: 'Last updated: July 2026',
     body: [
-      ['Our Promise', 'Every Tankha Puraan report is backed by a simple guarantee: if your report is not delivered to your email within 10 minutes of successful payment, you are entitled to a full refund.'],
-      ['How to Request a Refund', 'If your report hasn\'t arrived within 10 minutes, email help@tankhapuraan.com with your payment reference ID (shown on the payment success screen and in any confirmation you received). We will verify the delivery failure and process your refund.'],
-      ['Refund Timeline', 'Approved refunds are processed back to your original payment method via Razorpay, typically within 5-7 business days, depending on your bank or payment provider.'],
-      ['Once a Report Is Delivered', 'Because our reports are digital products generated and delivered instantly, we are unable to offer refunds once a report has been successfully delivered to your email — the product has been fully rendered and provided at that point.'],
-      ['Incorrect Information Entered', 'If a report reflects inaccurate figures because of information you entered incorrectly, this is not eligible for a refund under this policy — we recommend reviewing your entries carefully before payment. If you believe there is a genuine error in our calculations (not your input), contact us and we will investigate.'],
-      ['Contact', 'For any refund request or payment issue: help@tankhapuraan.com']
+      ['Our Reports Are Free', 'All Tankha Puraan reports are currently provided completely free of charge. There is no payment, no card, and therefore nothing to refund — this page previously covered our refund policy from when reports were paid, and now explains what to do if something goes wrong instead.'],
+      ['If Your Report Doesn\'t Arrive', 'Reports are typically delivered within 10 minutes. If yours hasn\'t arrived, first check your spam/promotions folder. If it\'s genuinely missing, email help@tankhapuraan.com with the email address you used and which report you requested, and we\'ll regenerate it for you.'],
+      ['Fair Use', 'Because reports are free, we apply a light limit — the same email can request the same report once every 24 hours — to keep the service sustainable for everyone. If you have a genuine need to regenerate a report sooner, email help@tankhapuraan.com.'],
+      ['Incorrect Information Entered', 'If a report reflects inaccurate figures because of information you entered incorrectly, simply generate a new report with the corrected figures. If you believe there\'s a genuine error in our calculations (not your input), contact us and we will investigate.'],
+      ['Contact', 'For any issue with a report: help@tankhapuraan.com']
     ]
   },
   disclaimer: {

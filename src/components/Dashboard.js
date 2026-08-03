@@ -15,7 +15,6 @@ const Dashboard = ({ goHome, openProduct }) => {
   const [searched, setSearched] = useState(false);
   const [orders, setOrders] = useState([]);
 
-  const formatAmount = (paise) => '₹' + Math.round(paise / 100);
   const formatDate = (iso) => new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
   const handleLookup = async () => {
@@ -43,13 +42,13 @@ const Dashboard = ({ goHome, openProduct }) => {
       <div className="product-view-inner">
         <div className="product-view-header">
           <p className="product-view-adhyaya">◆ My Reports ◆</p>
-          <h2 className="product-view-title">Your Order History</h2>
-          <p className="product-view-tagline">No password needed — enter the email you paid with.</p>
+          <h2 className="product-view-title">Your Report History</h2>
+          <p className="product-view-tagline">No password needed — enter the email you used.</p>
         </div>
 
         <div className="form-card">
           <div className="dashboard-lookup">
-            <p className="dashboard-lookup-desc">We look up every report tied to your email using your payment records — nothing to sign up for, nothing to remember.</p>
+            <p className="dashboard-lookup-desc">We look up every report tied to your email — nothing to sign up for, nothing to remember.</p>
             <div className="dashboard-lookup-row">
               <input
                 type="email"
@@ -78,7 +77,7 @@ const Dashboard = ({ goHome, openProduct }) => {
                   <div key={i} className="dashboard-order-card">
                     <div className="dashboard-order-info">
                       <span className="dashboard-order-product">{o.product}</span>
-                      <span className="dashboard-order-meta">{formatDate(o.date)} · {formatAmount(o.amount)}</span>
+                      <span className="dashboard-order-meta">{formatDate(o.date)} · Delivered to your email</span>
                     </div>
                     <span className={`product-status ${o.status === 'completed' ? 'status-live' : 'status-soon'}`}>
                       {o.status === 'completed' ? 'Delivered' : o.status === 'pending' ? 'Pending' : o.status}
@@ -94,7 +93,7 @@ const Dashboard = ({ goHome, openProduct }) => {
                     <div key={i} className="product-card live" onClick={() => openProduct(r.id)} style={{padding: '20px'}}>
                       <h3 className="product-name" style={{fontSize: '1.05rem'}}>{r.name}</h3>
                       <p className="product-tagline" style={{fontSize: '0.85rem', marginBottom: '8px'}}>{r.desc}</p>
-                      <span className="product-price">₹99 /report</span>
+                      <span className="product-price" style={{color: 'var(--green)', borderColor: 'var(--green)', fontWeight: 700}}>FREE</span>
                     </div>
                   ))}
                 </div>
